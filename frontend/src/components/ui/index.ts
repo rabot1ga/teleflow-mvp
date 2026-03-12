@@ -1,6 +1,7 @@
 export { Button } from './Button'
 export { Card } from './Card'
-export { Badge } from './Badge'
+export { StatCard } from './StatCard'
+export { Badge, StatusBadge } from './Badge'
 export { Modal } from './Modal'
 export { Table, Pagination } from './Table'
 export { Form, FormField, Input, Select, Textarea } from './Form'
