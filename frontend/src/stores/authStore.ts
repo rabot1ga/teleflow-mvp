@@ -50,6 +50,10 @@ export const useAuthStore = create<AuthState>()(
           const data = await response.json()
           const { access_token, refresh_token } = data.data
 
+          // Save tokens to localStorage for apiClient interceptor
+          localStorage.setItem('token', access_token)
+          localStorage.setItem('refreshToken', refresh_token)
+
           set({
             token: access_token,
             refreshToken: refresh_token,
@@ -110,6 +114,11 @@ export const useAuthStore = create<AuthState>()(
           }
 
           const loginData = await loginResponse.json()
+          
+          // Save tokens to localStorage for apiClient interceptor
+          localStorage.setItem('token', loginData.data.access_token)
+          localStorage.setItem('refreshToken', loginData.data.refresh_token)
+          
           set({
             token: loginData.data.access_token,
             refreshToken: loginData.data.refresh_token,
@@ -123,6 +132,10 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
+        // Clear tokens from localStorage
+        localStorage.removeItem('token')
+        localStorage.removeItem('refreshToken')
+        
         set({
           user: null,
           token: null,

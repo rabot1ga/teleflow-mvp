@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 const sourceSchema = z.object({
+  project_id: z.string().uuid(),
   name: z.string().min(1, 'Name is required'),
   source_type: z.enum(['rss', 'json_api', 'scraper', 'telegram', 'webhook']),
   url: z.string().url('Invalid URL').optional().or(z.literal('')),
@@ -18,18 +19,70 @@ export function ContentPage() {
   const [activeTab, setActiveTab] = useState<'sources' | 'articles' | 'moderation'>('sources')
   const [showAddModal, setShowAddModal] = useState(false)
   const queryClient = useQueryClient()
+  
+  // Get project_id from localStorage or use user ID as fallback
+  const authStorage = localStorage.getItem('auth-storage')
+  let projectId = '550e8400-e29b-41d4-a716-446655440000'
+  
+  if (authStorage) {
+    const user = JSON.parse(authStorage).state?.user
+    // Try to get project from user.projects array
+    if (user?.projects?.length > 0) {
+      projectId = user.projects[0].id
+    } else if (user?.id) {
+      // Fallback: use user ID as project ID
+      projectId = user.id
+    }
+  }
 
-  const { data: sources, isLoading } = useQuery({
+  console.log('🔑 Project ID:', projectId)
+  console.log('📦 Auth storage:', authStorage ? JSON.parse(authStorage).state?.user : 'Not logged in')
+
+  const { data: sources, isLoading, refetch } = useQuery({
     queryKey: ['sources'],
-    queryFn: () => contentApi.getSources('550e8400-e29b-41d4-a716-446655440000').then(r => r.data.data),
+    queryFn: async () => {
+      const response = await contentApi.getSources(projectId)
+      const standardResponse = response.data
+      
+      if (standardResponse && typeof standardResponse === 'object' && 'data' in standardResponse) {
+        const innerData = standardResponse.data
+        if (innerData && typeof innerData === 'object' && 'items' in innerData) {
+          return innerData.items || []
+        }
+        if (Array.isArray(innerData)) {
+          return innerData
+        }
+      }
+      return []
+    },
+    staleTime: 0, // Always refetch
   })
 
   const createMutation = useMutation({
-    mutationFn: (data: SourceForm) => contentApi.createSource(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sources'] })
+    mutationFn: async (data: SourceForm) => {
+      const validated = sourceSchema.parse(data)
+      const response = await contentApi.createSource(validated)
+      // Axios already parses JSON, response.data is the parsed object
+      return response.data
+    },
+    onSuccess: async (data) => {
+      console.log('✅ Source created:', data)
       setShowAddModal(false)
       toast.success('Source created')
+      
+      // Wait a bit then refetch
+      setTimeout(async () => {
+        console.log('🔄 Refetching sources...')
+        const result = await refetch()
+        console.log('📊 Refetch result:', result)
+        console.log('📋 Sources data:', result.data)
+        console.log('📋 Sources length:', Array.isArray(result.data) ? result.data.length : 'NOT ARRAY')
+      }, 500)
+    },
+    onError: (error: any) => {
+      console.error('❌ Create error:', error)
+      console.error('❌ Error response:', error.response?.data)
+      toast.error(error.response?.data?.error?.message || 'Failed to create source')
     },
   })
 
@@ -154,28 +207,45 @@ export function ContentPage() {
       {/* Add Source Modal */}
       <Modal
         isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
+        onClose={() => {
+          setShowAddModal(false)
+          createMutation.reset()
+        }}
         title="Add New Source"
         footer={
           <>
-            <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+            <Button 
+              variant="secondary" 
+              onClick={() => setShowAddModal(false)}
+              disabled={createMutation.isPending}
+            >
               Cancel
             </Button>
             <Button 
               variant="primary" 
-              onClick={() => document.getElementById('add-source-form')?.click()}
+              type="submit"
+              form="add-source-form"
+              disabled={createMutation.isPending}
             >
-              Create
+              {createMutation.isPending ? 'Creating...' : 'Create'}
             </Button>
           </>
         }
       >
+        {createMutation.isError && (
+          <div className="alert alert-danger mb-3">
+            {createMutation.error instanceof Error 
+              ? createMutation.error.message 
+              : 'Failed to create source'}
+          </div>
+        )}
         <form
           id="add-source-form"
           onSubmit={(e) => {
             e.preventDefault()
             const formData = new FormData(e.currentTarget)
             createMutation.mutate({
+              project_id: projectId,
               name: formData.get('name') as string,
               source_type: formData.get('source_type') as SourceForm['source_type'],
               url: formData.get('url') as string,
@@ -186,20 +256,20 @@ export function ContentPage() {
           <FormField label="Name" required>
             <Input name="name" placeholder="My RSS Feed" required />
           </FormField>
-          
+
           <FormField label="Source Type" required>
-            <Select 
-              name="source_type" 
+            <Select
+              name="source_type"
               options={sourceTypeOptions}
               defaultValue="rss"
               required
             />
           </FormField>
-          
+
           <FormField label="URL">
             <Input name="url" type="url" placeholder="https://example.com/rss" />
           </FormField>
-          
+
           <FormField label="Fetch Interval (minutes)">
             <Input name="fetch_interval_minutes" type="number" defaultValue="30" min="1" />
           </FormField>

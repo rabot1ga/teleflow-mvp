@@ -1,3 +1,4 @@
+import React from 'react'
 import { cn } from '@/utils'
 
 interface TableProps<T> {
@@ -22,6 +23,7 @@ export function Table<T>({
   className,
   emptyMessage = 'No data available',
 }: TableProps<T>) {
+  const safeData = Array.isArray(data) ? data : []
   const getValue = (item: T, key: string) => {
     const keys = key.split('.')
     let value: any = item
@@ -31,7 +33,7 @@ export function Table<T>({
     return value
   }
 
-  if (data.length === 0) {
+  if (safeData.length === 0) {
     return (
       <div className={cn('text-center text-muted py-5', className)}>
         {emptyMessage}

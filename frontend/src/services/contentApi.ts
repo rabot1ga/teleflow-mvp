@@ -33,46 +33,48 @@ export interface Article {
 export const contentApi = {
   // Sources
   getSources: (projectId: string) =>
-    apiClient.get('/content/sources', { params: { project_id: projectId } }),
+    apiClient.get('/api/v1/content/sources', { params: { project_id: projectId } }),
 
   createSource: (data: Partial<Source>) =>
-    apiClient.post('/content/sources', data),
+    apiClient.post('/api/v1/content/sources', data, {
+      headers: { 'Content-Type': 'application/json' },
+    }),
 
   updateSource: (id: string, data: Partial<Source>) =>
-    apiClient.patch(`/content/sources/${id}`, data),
+    apiClient.patch(`/api/v1/content/sources/${id}`, data),
 
   deleteSource: (id: string) =>
-    apiClient.delete(`/content/sources/${id}`),
+    apiClient.delete(`/api/v1/content/sources/${id}`),
 
   fetchSource: (id: string) =>
-    apiClient.post(`/content/sources/${id}/fetch`),
+    apiClient.post(`/api/v1/content/sources/${id}/fetch`),
 
   // Articles
   getArticles: (params: { project_id: string; status?: string; page?: number; per_page?: number }) =>
-    apiClient.get('/content/articles', { params }),
+    apiClient.get('/api/v1/content/articles', { params }),
 
   getArticle: (id: string) =>
-    apiClient.get(`/content/articles/${id}`),
+    apiClient.get(`/api/v1/content/articles/${id}`),
 
   updateArticle: (id: string, data: Partial<Article>) =>
-    apiClient.patch(`/content/articles/${id}`, data),
+    apiClient.patch(`/api/v1/content/articles/${id}`, data),
 
   deleteArticle: (id: string) =>
-    apiClient.delete(`/content/articles/${id}`),
+    apiClient.delete(`/api/v1/content/articles/${id}`),
 
   // Moderation
   getModerationQueue: (params: { status?: string; per_page?: number }) =>
-    apiClient.get('/content/moderation/queue', { params }),
+    apiClient.get('/api/v1/content/moderation/queue', { params }),
 
   approveArticle: (id: string, target_id?: string) =>
-    apiClient.post(`/content/articles/${id}/approve`, { target_id }),
+    apiClient.post(`/api/v1/content/articles/${id}/approve`, { target_id }),
 
   rejectArticle: (id: string, reason: string, comment?: string) =>
-    apiClient.post(`/content/articles/${id}/reject`, { reason, comment }),
+    apiClient.post(`/api/v1/content/articles/${id}/reject`, { reason, comment }),
 
   // AI Operations
   rewriteArticle: (articleId: string, projectId: string, style?: string, tone?: string) =>
-    apiClient.post('/content/ai/rewrite', {
+    apiClient.post('/api/v1/content/ai/rewrite', {
       article_id: articleId,
       project_id: projectId,
       style,
@@ -80,21 +82,21 @@ export const contentApi = {
     }),
 
   summarizeArticle: (articleId: string, projectId: string, max_length?: number) =>
-    apiClient.post('/content/ai/summarize', {
+    apiClient.post('/api/v1/content/ai/summarize', {
       article_id: articleId,
       project_id: projectId,
       max_length,
     }),
 
   classifyArticle: (articleId: string, projectId: string, categories?: string[]) =>
-    apiClient.post('/content/ai/classify', {
+    apiClient.post('/api/v1/content/ai/classify', {
       article_id: articleId,
       project_id: projectId,
       categories,
     }),
 
   generateTags: (articleId: string, projectId: string, max_tags?: number) =>
-    apiClient.post('/content/ai/generate-tags', {
+    apiClient.post('/api/v1/content/ai/generate-tags', {
       article_id: articleId,
       project_id: projectId,
       max_tags,
