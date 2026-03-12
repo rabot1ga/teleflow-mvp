@@ -14,13 +14,41 @@ export default defineConfig({
     port: 3000,
     host: true,
     proxy: {
-      '/api': {
-        target: 'http://localhost:80',
+      '/api/v1/auth': {
+        target: 'http://host.docker.internal:8001',
         changeOrigin: true,
       },
-      '/ws': {
-        target: 'ws://localhost:80',
-        ws: true,
+      '/api/v1/content': {
+        target: 'http://host.docker.internal:8002',
+        changeOrigin: true,
+      },
+      '/api/v1/publishing': {
+        target: 'http://host.docker.internal:8004',
+        changeOrigin: true,
+      },
+      '/api/v1/funnels': {
+        target: 'http://host.docker.internal:8005',
+        changeOrigin: true,
+      },
+      '/api/v1/bot': {
+        target: 'http://host.docker.internal:8006',
+        changeOrigin: true,
+      },
+      '/api/v1/userbot': {
+        target: 'http://host.docker.internal:8007',
+        changeOrigin: true,
+      },
+      '/api/v1/promotion': {
+        target: 'http://host.docker.internal:8008',
+        changeOrigin: true,
+      },
+      '/api/v1/ai': {
+        target: 'http://host.docker.internal:8009',
+        changeOrigin: true,
+      },
+      '/api/v1/analytics': {
+        target: 'http://host.docker.internal:8010',
+        changeOrigin: true,
       },
     },
   },

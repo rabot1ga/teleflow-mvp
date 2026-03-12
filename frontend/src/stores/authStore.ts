@@ -31,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       refreshToken: null,
       isAuthenticated: false,
-      isLoading: true,
+      isLoading: false,
 
       login: async (email: string, password: string) => {
         set({ isLoading: true })
@@ -41,31 +41,33 @@ export const useAuthStore = create<AuthState>()(
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
           })
-          
+
           if (!response.ok) {
             const error = await response.json()
             throw new Error(error.error?.message || 'Login failed')
           }
-          
+
           const data = await response.json()
           const { access_token, refresh_token } = data.data
-          
+
           set({
             token: access_token,
             refreshToken: refresh_token,
             isAuthenticated: true,
             isLoading: false,
           })
-          
+
           // Fetch user info
-          await fetch('/api/v1/auth/me', {
-            headers: { 'Authorization': `Bearer ${access_token}` },
-          })
-            .then(r => r.json())
-            .then(data => {
-              set({ user: data.data })
+          try {
+            const meResponse = await fetch('/api/v1/auth/me', {
+              headers: { 'Authorization': `Bearer ${access_token}` },
             })
-        } catch (error) {
+            const meData = await meResponse.json()
+            set({ user: meData.data })
+          } catch (e) {
+            // Ignore me fetch error
+          }
+        } catch (error: any) {
           set({ isLoading: false })
           throw error
         }
@@ -84,28 +86,37 @@ export const useAuthStore = create<AuthState>()(
               last_name: lastName,
             }),
           })
-          
+
           if (!response.ok) {
-            const error = await response.json()
-            throw new Error(error.error?.message || 'Registration failed')
+            const errorText = await response.text()
+            let errorData = { error: { message: 'Registration failed' } }
+            try {
+              errorData = JSON.parse(errorText)
+            } catch (e) {
+              // Ignore parse error
+            }
+            throw new Error(errorData.error?.message || 'Registration failed')
           }
-          
+
           // Auto login after registration
-          await fetch('/api/v1/auth/login', {
+          const loginResponse = await fetch('/api/v1/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
           })
-            .then(r => r.json())
-            .then(data => {
-              set({
-                token: data.data.access_token,
-                refreshToken: data.data.refresh_token,
-                isAuthenticated: true,
-                isLoading: false,
-              })
-            })
-        } catch (error) {
+
+          if (!loginResponse.ok) {
+            throw new Error('Auto-login failed after registration')
+          }
+
+          const loginData = await loginResponse.json()
+          set({
+            token: loginData.data.access_token,
+            refreshToken: loginData.data.refresh_token,
+            isAuthenticated: true,
+            isLoading: false,
+          })
+        } catch (error: any) {
           set({ isLoading: false })
           throw error
         }

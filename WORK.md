@@ -22,7 +22,7 @@
 ✅ AI & Analytics Test — 7/7 тестов прошли
 ```
 
-#### Health Checks — 9/9 сервисов работают
+#### Health Checks — 10/10 сервисов работают
 ```
 ✅ auth:8001       v0.1.0
 ✅ content:8002    v0.1.0
@@ -33,6 +33,7 @@
 ✅ promotion:8008  v0.1.0
 ✅ ai:8009         v0.1.0
 ✅ analytics:8010  v0.1.0
+✅ rsshub:1200     latest  ← НОВЫЙ
 ```
 
 ### Статус сервисов
@@ -48,6 +49,7 @@
 | Promotion Service | 8008 | ✅ healthy | ✅ | ✅ | 80% |
 | AI Service | 8009 | ✅ healthy | ✅ | ✅ | 100% |
 | Analytics Service | 8010 | ✅ healthy | ✅ | ✅ | 100% |
+| **RSSHub** | 1200 | ✅ new | ✅ | — | **100%** |
 | **Frontend** | 3000 | ✅ dev | ✅ | — | **95%** |
 
 ---
@@ -81,6 +83,42 @@
 ✅ promo_db       ✅ ai_db          ✅ analytics_db
 ```
 
+### RSSHub Integration
+
+**Что такое RSSHub:**
+- Open-source RSS feed генератор
+- Поддержка Telegram каналов
+- Парсинг социальных сетей
+- Кастомные правила парсинга
+
+**Примеры использования:**
+
+```bash
+# Telegram канал (по username)
+http://localhost:1200/telegram/channel/durov
+
+# Telegram канал (по invite link)
+http://localhost:1200/telegram/channel/https://t.me/durov
+
+# Twitter timeline
+http://localhost:1200/twitter/user/elonmusk
+
+# YouTube channel
+http://localhost:1200/youtube/channel/UCX6OQ3DkcsbYNE6H8uQQuVA
+
+# GitHub repo issues
+http://localhost:1200/github/issue/rabot1ga/teleflow-mvp
+```
+
+**Добавление источника в TeleFlow:**
+
+1. Откройте Content → Sources
+2. Нажмите "Add Source"
+3. Выберите тип "rss"
+4. URL: `http://rsshub:1200/telegram/channel/durov`
+5. Интервал: 30 минут
+6. Сохраните
+
 ---
 
 ## 🗺 Детальная дорожная карта (все этапы 0-9)
@@ -88,13 +126,14 @@
 ### ✅ Этап 0: Инфраструктура и скаффолдинг (100%)
 
 **Создано:**
-- [x] Docker Compose конфигурация (11 сервисов + 7 infra)
+- [x] Docker Compose конфигурация (12 сервисов + 7 infra + RSSHub)
 - [x] PostgreSQL с 9 базами данных
 - [x] Redis (cache + broker)
 - [x] Traefik API Gateway
 - [x] Prometheus + Grafana + Loki
 - [x] Meilisearch (поиск)
 - [x] MinIO (файловое хранилище)
+- [x] **RSSHub** (RSS генератор для Telegram)
 - [x] Shared library (teleflow-common)
 - [x] Makefile для разработки
 - [x] .env.example конфигурация
@@ -113,6 +152,7 @@
 - [x] Ingestion pipeline (Celery tasks)
 - [x] Celery Beat для периодического сбора
 - [x] Интеграция с RSS
+- [x] **Интеграция с RSSHub** (Telegram каналы)
 
 **API Endpoints:**
 - `GET/POST /api/v1/content/sources`
@@ -306,7 +346,7 @@
 
 ---
 
-### ✅ Этап 9: Frontend (React SPA) (100%)
+### ✅ Этап 9: Frontend (React SPA) (95%)
 
 **Создано:**
 - [x] React 18 + Vite + TypeScript

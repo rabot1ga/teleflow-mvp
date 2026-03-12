@@ -7,16 +7,17 @@ services:
   # API Gateway (Traefik)
   # -------------------------------------------
   traefik:
-    image: traefik:v2.10
+    image: traefik:v3.3
     container_name: teleflow-traefik
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.swarmmode=false"
       - "--entrypoints.web.address=:80"
       - "--accesslog=true"
       - "--log.level=INFO"
+    environment:
+      - DOCKER_API_VERSION=1.40
     ports:
       - "80:80"
       - "8080:8080"  # Dashboard (dev only!)
@@ -92,6 +93,30 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  # -------------------------------------------
+  # RSSHub (RSS Feed Generator for Telegram & more)
+  # -------------------------------------------
+  rsshub:
+    image: diygod/rsshub:latest
+    container_name: teleflow-rsshub
+    environment:
+      PUPPETEER_WS_ENDPOINT: ""
+      NODE_ENV: production
+    ports:
+      - "1200:1200"
+    networks:
+      - teleflow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1200/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - redis
+    profiles:
+      - ""
+      - dev
 
   # -------------------------------------------
   # MinIO
@@ -748,14 +773,18 @@ services:
       target: development
     container_name: teleflow-frontend
     environment:
-      VITE_API_BASE_URL: http://localhost/api/v1
-      VITE_WS_URL: ws://localhost/ws
+      VITE_API_BASE_URL: ""
+      VITE_WS_URL: ""
+      DOCKER_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "3000:3000"
     volumes:
       - ./frontend/src:/app/src
       - ./frontend/public:/app/public
       - ./frontend/vite.config.ts:/app/vite.config.ts
+      - ./frontend/package.json:/app/package.json
     networks:
       - teleflow-network
     labels:
