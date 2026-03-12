@@ -1,0 +1,140 @@
+/**
+ * TeleFlow Design System - Modern UI Variables
+ * Based on modern design principles with focus on clarity and productivity
+ */
+
+:root {
+  /* ===== Color Palette ===== */
+  /* Primary - Modern Blue */
+  --tf-primary-50: #eff6ff;
+  --tf-primary-100: #dbeafe;
+  --tf-primary-200: #bfdbfe;
+  --tf-primary-300: #93c5fd;
+  --tf-primary-400: #60a5fa;
+  --tf-primary-500: #3b82f6;
+  --tf-primary-600: #2563eb;
+  --tf-primary-700: #1d4ed8;
+  --tf-primary-800: #1e40af;
+  --tf-primary-900: #1e3a8a;
+
+  /* Success - Emerald */
+  --tf-success-50: #ecfdf5;
+  --tf-success-500: #10b981;
+  --tf-success-600: #059669;
+  --tf-success-700: #047857;
+
+  /* Danger - Rose */
+  --tf-danger-50: #fff1f2;
+  --tf-danger-500: #f43f5e;
+  --tf-danger-600: #e11d48;
+  --tf-danger-700: #be123c;
+
+  /* Warning - Amber */
+  --tf-warning-50: #fffbeb;
+  --tf-warning-500: #f59e0b;
+  --tf-warning-600: #d97706;
+  --tf-warning-700: #b45309;
+
+  /* Neutral - Slate */
+  --tf-slate-50: #f8fafc;
+  --tf-slate-100: #f1f5f9;
+  --tf-slate-200: #e2e8f0;
+  --tf-slate-300: #cbd5e1;
+  --tf-slate-400: #94a3b8;
+  --tf-slate-500: #64748b;
+  --tf-slate-600: #475569;
+  --tf-slate-700: #334155;
+  --tf-slate-800: #1e293b;
+  --tf-slate-900: #0f172a;
+
+  /* ===== Semantic Colors ===== */
+  --tf-bg-primary: #ffffff;
+  --tf-bg-secondary: #f8fafc;
+  --tf-bg-tertiary: #f1f5f9;
+  --tf-bg-hover: #e2e8f0;
+
+  --tf-text-primary: #0f172a;
+  --tf-text-secondary: #475569;
+  --tf-text-tertiary: #94a3b8;
+  --tf-text-inverse: #ffffff;
+
+  --tf-border-primary: #e2e8f0;
+  --tf-border-secondary: #cbd5e1;
+  --tf-border-focus: #3b82f6;
+
+  --tf-shadow-color: rgba(15, 23, 42, 0.1);
+
+  /* ===== Shadows ===== */
+  --tf-shadow-xs: 0 1px 2px 0 var(--tf-shadow-color);
+  --tf-shadow-sm: 0 1px 3px 0 var(--tf-shadow-color), 0 1px 2px -1px var(--tf-shadow-color);
+  --tf-shadow-md: 0 4px 6px -1px var(--tf-shadow-color), 0 2px 4px -2px var(--tf-shadow-color);
+  --tf-shadow-lg: 0 10px 15px -3px var(--tf-shadow-color), 0 4px 6px -4px var(--tf-shadow-color);
+  --tf-shadow-xl: 0 20px 25px -5px var(--tf-shadow-color), 0 8px 10px -6px var(--tf-shadow-color);
+
+  /* ===== Border Radius ===== */
+  --tf-radius-sm: 0.25rem;
+  --tf-radius-md: 0.375rem;
+  --tf-radius-lg: 0.5rem;
+  --tf-radius-xl: 0.75rem;
+  --tf-radius-2xl: 1rem;
+  --tf-radius-full: 9999px;
+
+  /* ===== Spacing ===== */
+  --tf-spacing-1: 0.25rem;
+  --tf-spacing-2: 0.5rem;
+  --tf-spacing-3: 0.75rem;
+  --tf-spacing-4: 1rem;
+  --tf-spacing-5: 1.25rem;
+  --tf-spacing-6: 1.5rem;
+  --tf-spacing-8: 2rem;
+  --tf-spacing-10: 2.5rem;
+  --tf-spacing-12: 3rem;
+
+  /* ===== Typography ===== */
+  --tf-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --tf-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --tf-font-size-xs: 0.75rem;
+  --tf-font-size-sm: 0.875rem;
+  --tf-font-size-base: 1rem;
+  --tf-font-size-lg: 1.125rem;
+  --tf-font-size-xl: 1.25rem;
+  --tf-font-size-2xl: 1.5rem;
+  --tf-font-size-3xl: 1.875rem;
+
+  --tf-font-weight-normal: 400;
+  --tf-font-weight-medium: 500;
+  --tf-font-weight-semibold: 600;
+  --tf-font-weight-bold: 700;
+
+  --tf-line-height-tight: 1.25;
+  --tf-line-height-normal: 1.5;
+  --tf-line-height-relaxed: 1.625;
+
+  /* ===== Transitions ===== */
+  --tf-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --tf-transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --tf-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ===== Z-Index Scale ===== */
+  --tf-z-dropdown: 100;
+  --tf-z-sticky: 200;
+  --tf-z-fixed: 300;
+  --tf-z-modal-backdrop: 400;
+  --tf-z-modal: 500;
+  --tf-z-popover: 600;
+  --tf-z-tooltip: 700;
+  --tf-z-toast: 800;
+}
+
+/* ===== Dark Mode (Future) ===== */
+/*
+[data-theme="dark"] {
+  --tf-bg-primary: #0f172a;
+  --tf-bg-secondary: #1e293b;
+  --tf-bg-tertiary: #334155;
+  --tf-text-primary: #f8fafc;
+  --tf-text-secondary: #cbd5e1;
+  --tf-border-primary: #334155;
+}
+*/

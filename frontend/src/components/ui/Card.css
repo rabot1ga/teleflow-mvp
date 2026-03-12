@@ -1,0 +1,70 @@
+/**
+ * TeleFlow Card Component Styles
+ */
+
+.tf-card {
+  background: var(--tf-bg-primary);
+  border-radius: var(--tf-radius-xl);
+  border: 1px solid var(--tf-border-primary);
+  box-shadow: var(--tf-shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--tf-transition-fast);
+
+  &:hover {
+    box-shadow: var(--tf-shadow-md);
+  }
+}
+
+.tf-card__header {
+  padding: var(--tf-spacing-5) var(--tf-spacing-6);
+  border-bottom: 1px solid var(--tf-border-primary);
+  background: var(--tf-bg-secondary);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--tf-spacing-4);
+}
+
+.tf-card__header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.tf-card__title {
+  font-size: var(--tf-font-size-lg);
+  font-weight: var(--tf-font-weight-semibold);
+  color: var(--tf-text-primary);
+  margin: 0 0 var(--tf-spacing-1) 0;
+  line-height: var(--tf-line-height-tight);
+}
+
+.tf-card__subtitle {
+  font-size: var(--tf-font-size-sm);
+  color: var(--tf-text-tertiary);
+  margin: 0;
+  line-height: var(--tf-line-height-normal);
+}
+
+.tf-card__action {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--tf-spacing-2);
+}
+
+.tf-card__body {
+  padding: var(--tf-spacing-6);
+
+  &--no-padding {
+    padding: 0;
+  }
+}
+
+.tf-card__footer {
+  padding: var(--tf-spacing-4) var(--tf-spacing-6);
+  border-top: 1px solid var(--tf-border-primary);
+  background: var(--tf-bg-secondary);
+  display: flex;
+  gap: var(--tf-spacing-3);
+  justify-content: flex-end;
+}
