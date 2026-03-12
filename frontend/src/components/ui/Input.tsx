@@ -1,5 +1,5 @@
 import { cn } from '@/utils'
-import type { InputHTMLAttributes } from 'react'
+import { forwardRef, type InputHTMLAttributes } from 'react'
 import './Input.css'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -9,19 +9,23 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   size?: 'sm' | 'md' | 'lg'
 }
 
-export function Input({
-  className,
-  error,
-  leftIcon,
-  rightIcon,
-  size = 'md',
-  ...props
-}: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  {
+    className,
+    error,
+    leftIcon,
+    rightIcon,
+    size = 'md',
+    ...props
+  },
+  ref
+) {
   return (
     <div className="tf-input-wrapper">
       <div className={cn('tf-input-container', `tf-input-container--${size}`, className)}>
         {leftIcon && <span className="tf-input__icon tf-input__icon--left">{leftIcon}</span>}
         <input
+          ref={ref}
           className={cn(
             'tf-input',
             error && 'tf-input--error'
@@ -33,4 +37,4 @@ export function Input({
       {error && <span className="tf-input__error">{error}</span>}
     </div>
   )
-}
+})
