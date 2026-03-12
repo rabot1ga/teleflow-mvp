@@ -3,6 +3,8 @@
  * Modern, clean, and productive UI
  */
 
+@import './design-tokens.css';
+
 /* ===== Base Styles ===== */
 * {
   box-sizing: border-box;

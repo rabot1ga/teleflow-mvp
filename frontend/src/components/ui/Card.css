@@ -2,6 +2,8 @@
  * TeleFlow Card Component Styles
  */
 
+@import '../../styles/design-tokens.css';
+
 .tf-card {
   background: var(--tf-bg-primary);
   border-radius: var(--tf-radius-xl);
