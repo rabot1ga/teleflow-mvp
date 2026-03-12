@@ -1,0 +1,39 @@
+/**
+ * TeleFlow PageHeader Component Styles
+ */
+
+.tf-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--tf-spacing-4);
+  margin-bottom: var(--tf-spacing-6);
+  padding-bottom: var(--tf-spacing-4);
+  border-bottom: 1px solid var(--tf-border-primary);
+}
+
+.tf-page-header__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.tf-page-header__title {
+  font-size: var(--tf-font-size-2xl);
+  font-weight: var(--tf-font-weight-semibold);
+  color: var(--tf-text-primary);
+  margin: 0 0 var(--tf-spacing-2) 0;
+  line-height: var(--tf-line-height-tight);
+}
+
+.tf-page-header__description {
+  font-size: var(--tf-font-size-base);
+  color: var(--tf-text-secondary);
+  margin: 0;
+  line-height: var(--tf-line-height-normal);
+}
+
+.tf-page-header__action {
+  flex-shrink: 0;
+  display: flex;
+  gap: var(--tf-spacing-2);
+}

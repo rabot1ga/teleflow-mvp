@@ -1,0 +1,41 @@
+/**
+ * TeleFlow Charts Component Styles
+ */
+
+.tf-chart {
+  background: var(--tf-bg-primary);
+  border-radius: var(--tf-radius-xl);
+  border: 1px solid var(--tf-border-primary);
+  padding: var(--tf-spacing-5);
+  position: relative;
+}
+
+.tf-chart__title {
+  font-size: var(--tf-font-size-base);
+  font-weight: var(--tf-font-weight-semibold);
+  color: var(--tf-text-primary);
+  margin: 0 0 var(--tf-spacing-4) 0;
+}
+
+.tf-chart__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+  color: var(--tf-text-tertiary);
+  text-align: center;
+}
+
+.tf-chart__icon {
+  font-size: var(--tf-font-size-4xl, 3rem);
+  margin-bottom: var(--tf-spacing-3);
+  opacity: 0.5;
+}
+
+.tf-chart__text {
+  font-size: var(--tf-font-size-base);
+  font-weight: var(--tf-font-weight-medium);
+  color: var(--tf-text-secondary);
+  margin: 0 0 var(--tf-spacing-1) 0;
+}

@@ -1,93 +1,89 @@
-import { Card } from '@/components/ui'
+import { Card, StatCard, PageHeader } from '@/components/ui'
+import './DashboardPage.css'
 
 export function DashboardPage() {
   return (
-    <div>
-      <div className="mb-4">
-        <h1 className="h2 mb-1">Dashboard</h1>
-        <p className="text-muted">Overview of your TeleFlow platform activity</p>
-      </div>
+    <div className="dashboard-page">
+      <PageHeader
+        title="Dashboard"
+        description="Overview of your TeleFlow platform activity"
+      />
 
       {/* Stats Grid */}
-      <div className="d-flex flex-wrap gap-4 mb-4">
-        {/* Articles Card */}
-        <Card title="Articles" style={{ flex: '1 1 250px' }}>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="h3 mb-0">1,234</h2>
-              <small className="text-muted">Total articles</small>
-            </div>
-            <span className="fs-1">📰</span>
-          </div>
-          <div className="mt-3">
-            <span className="badge bg-success">↑ 12%</span>
-            <small className="text-muted ms-2">from last month</small>
-          </div>
-        </Card>
-
-        {/* Sources Card */}
-        <Card title="Sources" style={{ flex: '1 1 250px' }}>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="h3 mb-0">8</h2>
-              <small className="text-muted">Active sources</small>
-            </div>
-            <span className="fs-1">📡</span>
-          </div>
-          <div className="mt-3">
-            <span className="badge bg-success">↑ 2</span>
-            <small className="text-muted ms-2">new this week</small>
-          </div>
-        </Card>
-
-        {/* Funnels Card */}
-        <Card title="Funnels" style={{ flex: '1 1 250px' }}>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="h3 mb-0">5</h2>
-              <small className="text-muted">Active funnels</small>
-            </div>
-            <span className="fs-1">🎯</span>
-          </div>
-          <div className="mt-3">
-            <span className="badge bg-secondary">No change</span>
-            <small className="text-muted ms-2">stable</small>
-          </div>
-        </Card>
-
-        {/* Subscribers Card */}
-        <Card title="Subscribers" style={{ flex: '1 1 250px' }}>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="h3 mb-0">2,847</h2>
-              <small className="text-muted">Total subscribers</small>
-            </div>
-            <span className="fs-1">👥</span>
-          </div>
-          <div className="mt-3">
-            <span className="badge bg-success">↑ 8%</span>
-            <small className="text-muted ms-2">from last month</small>
-          </div>
-        </Card>
+      <div className="stats-grid">
+        <StatCard
+          title="Total Articles"
+          value="1,234"
+          icon="📰"
+          trend={{ value: 12, isPositive: true }}
+        />
+        <StatCard
+          title="Active Sources"
+          value="8"
+          icon="📡"
+          trend={{ value: 2, isPositive: true }}
+        />
+        <StatCard
+          title="Active Funnels"
+          value="5"
+          icon="🎯"
+        />
+        <StatCard
+          title="Subscribers"
+          value="2,847"
+          icon="👥"
+          trend={{ value: 8, isPositive: true }}
+        />
       </div>
 
       {/* Quick Actions */}
-      <Card title="Quick Actions">
-        <div className="d-flex flex-wrap gap-3">
-          <button className="btn btn-primary">📰 Add Source</button>
-          <button className="btn btn-primary">🎯 Create Funnel</button>
-          <button className="btn btn-primary">📤 New Broadcast</button>
-          <button className="btn btn-outline-secondary">⚙️ Settings</button>
+      <Card title="Quick Actions" className="mt-6">
+        <div className="quick-actions">
+          <button className="btn btn-primary">
+            <span className="btn-icon">📰</span>
+            Add Source
+          </button>
+          <button className="btn btn-primary">
+            <span className="btn-icon">🎯</span>
+            Create Funnel
+          </button>
+          <button className="btn btn-primary">
+            <span className="btn-icon">📤</span>
+            New Broadcast
+          </button>
+          <button className="btn btn-outline">
+            <span className="btn-icon">⚙️</span>
+            Settings
+          </button>
         </div>
       </Card>
 
       {/* Recent Activity */}
-      <Card title="Recent Activity" className="mt-4">
-        <div className="text-center text-muted py-5">
-          <p className="mb-2">No recent activity</p>
-          <small>Start by adding a content source</small>
+      <Card title="Recent Activity" className="mt-6">
+        <div className="empty-state">
+          <div className="empty-state__icon">📭</div>
+          <h3 className="empty-state__title">No recent activity</h3>
+          <p className="empty-state__text">
+            Start by adding a content source to see activity here
+          </p>
         </div>
       </Card>
+
+      {/* Content Overview */}
+      <div className="grid-2 mt-6">
+        <Card title="Content Performance">
+          <div className="empty-state empty-state--small">
+            <div className="empty-state__icon">📈</div>
+            <p className="text-muted">Analytics coming soon</p>
+          </div>
+        </Card>
+        <Card title="Top Sources">
+          <div className="empty-state empty-state--small">
+            <div className="empty-state__icon">🔥</div>
+            <p className="text-muted">Top sources coming soon</p>
+          </div>
+        </Card>
+      </div>
     </div>
   )
 }

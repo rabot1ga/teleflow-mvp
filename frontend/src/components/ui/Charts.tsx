@@ -1,4 +1,5 @@
 import { cn } from '@/utils'
+import './Charts.css'
 
 interface SimpleChartProps {
   data?: any[]

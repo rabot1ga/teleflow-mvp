@@ -1,4 +1,5 @@
 import { cn } from '@/utils'
+import './PageHeader.css'
 
 interface PageHeaderProps {
   title: string

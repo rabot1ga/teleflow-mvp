@@ -1,4 +1,5 @@
 import { cn } from '@/utils'
+import './StatCard.css'
 
 interface StatCardProps {
   title: string
