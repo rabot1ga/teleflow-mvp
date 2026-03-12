@@ -1,56 +1,49 @@
-import { cn } from '@/utils'
-import type { HTMLAttributes } from 'react'
+import React from 'react'
+import { cn } from '@/utils/cn'
 import './Card.css'
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  title?: string | React.ReactNode
-  subtitle?: string | React.ReactNode
+export interface CardProps {
+  className?: string
+  children?: React.ReactNode
+  title?: string
+  subtitle?: string
   action?: React.ReactNode
   footer?: React.ReactNode
   noPadding?: boolean
   hoverable?: boolean
 }
 
-export function Card({
+export const Card: React.FC<CardProps> = ({
   className,
+  children,
   title,
   subtitle,
   action,
-  children,
   footer,
   noPadding = false,
   hoverable = false,
-  ...props
-}: CardProps) {
+}) => {
+  const classes = cn(
+    'tf-card',
+    {
+      'tf-card--no-padding': noPadding,
+      'tf-card--hoverable': hoverable,
+    },
+    className
+  )
+
   return (
-    <div
-      className={cn(
-        'tf-card',
-        hoverable && 'tf-card--hoverable',
-        className
-      )}
-      {...props}
-    >
+    <div className={classes}>
       {(title || subtitle || action) && (
         <div className="tf-card__header">
           <div className="tf-card__header-content">
-            {typeof title === 'string' ? (
-              <h3 className="tf-card__title">{title}</h3>
-            ) : (
-              title
-            )}
-            {typeof subtitle === 'string' ? (
-              <p className="tf-card__subtitle">{subtitle}</p>
-            ) : (
-              subtitle
-            )}
+            {title && <h3 className="tf-card__title">{title}</h3>}
+            {subtitle && <p className="tf-card__subtitle">{subtitle}</p>}
           </div>
           {action && <div className="tf-card__action">{action}</div>}
         </div>
       )}
-      <div className={cn('tf-card__body', noPadding && 'tf-card__body--no-padding')}>
-        {children}
-      </div>
+      <div className="tf-card__content">{children}</div>
       {footer && <div className="tf-card__footer">{footer}</div>}
     </div>
   )

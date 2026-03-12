@@ -1,8 +1,8 @@
 import { cn } from '@/utils'
-import type { HTMLAttributes } from 'react'
 import './PageHeader.css'
 
-interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
+interface PageHeaderProps {
+  className?: string
   title: string | React.ReactNode
   description?: string | React.ReactNode
   action?: React.ReactNode

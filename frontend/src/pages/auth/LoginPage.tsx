@@ -57,7 +57,8 @@ export function LoginPage() {
           id="email"
           type="email"
           placeholder="you@example.com"
-          error={errors.email?.message}
+          error={!!errors.email?.message}
+          errorText={errors.email?.message}
           {...register('email')}
         />
       </div>
@@ -75,7 +76,8 @@ export function LoginPage() {
           id="password"
           type="password"
           placeholder="••••••••"
-          error={errors.password?.message}
+          error={!!errors.password?.message}
+          errorText={errors.password?.message}
           {...register('password')}
         />
       </div>

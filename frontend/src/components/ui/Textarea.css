@@ -1,0 +1,104 @@
+.tf-textarea-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-1);
+  width: 100%;
+}
+
+.tf-textarea__label {
+  font-size: var(--tf-font-size-sm);
+  font-weight: var(--tf-font-weight-medium);
+  color: var(--tf-text-primary);
+  line-height: var(--tf-line-height-snug);
+}
+
+.tf-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--tf-space-3) var(--tf-space-4);
+  font-family: var(--tf-font-sans);
+  font-size: var(--tf-font-size-base);
+  color: var(--tf-text-primary);
+  background-color: var(--tf-input-bg);
+  border: 1px solid var(--tf-input-border);
+  border-radius: var(--tf-radius-md);
+  transition: all var(--tf-transition-fast);
+  resize: vertical;
+}
+
+.tf-textarea::placeholder {
+  color: var(--tf-text-tertiary);
+}
+
+.tf-textarea:hover:not(:disabled):not(:focus) {
+  border-color: var(--tf-input-border-hover);
+}
+
+.tf-textarea:focus {
+  border-color: var(--tf-input-border-focus);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+.tf-textarea:disabled {
+  background-color: var(--tf-bg-surface-tertiary);
+  cursor: var(--cursor-not-allowed, not-allowed);
+  opacity: var(--tf-opacity-disabled);
+  resize: none;
+}
+
+/* Resize options */
+.tf-textarea--resize-none {
+  resize: none;
+}
+
+.tf-textarea--resize-vertical {
+  resize: vertical;
+}
+
+.tf-textarea--resize-auto {
+  resize: none;
+  overflow: hidden;
+  min-height: auto;
+  height: auto;
+}
+
+/* Error state */
+.tf-textarea-wrapper--error .tf-textarea {
+  border-color: var(--tf-border-error);
+}
+
+.tf-textarea-wrapper--error .tf-textarea:focus {
+  border-color: var(--tf-border-error);
+  box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.1);
+}
+
+.tf-textarea--error {
+  border-color: var(--tf-border-error);
+}
+
+/* Hint and Error text */
+.tf-textarea__hint {
+  font-size: var(--tf-font-size-xs);
+  color: var(--tf-text-tertiary);
+  line-height: var(--tf-line-height-normal);
+}
+
+.tf-textarea__error {
+  font-size: var(--tf-font-size-xs);
+  color: var(--tf-danger-600);
+  line-height: var(--tf-line-height-normal);
+}
+
+/* Size variations */
+.tf-textarea--sm {
+  min-height: 60px;
+  padding: var(--tf-space-2) var(--tf-space-3);
+  font-size: var(--tf-font-size-sm);
+}
+
+.tf-textarea--lg {
+  min-height: 160px;
+  padding: var(--tf-space-4) var(--tf-space-5);
+  font-size: var(--tf-font-size-lg);
+}

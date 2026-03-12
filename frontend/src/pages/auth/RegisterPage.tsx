@@ -63,7 +63,8 @@ export function RegisterPage() {
           <Input
             id="firstName"
             placeholder="John"
-            error={errors.firstName?.message}
+            error={!!errors.firstName?.message}
+            errorText={errors.firstName?.message}
             {...register('firstName')}
           />
         </div>
@@ -75,7 +76,8 @@ export function RegisterPage() {
           <Input
             id="lastName"
             placeholder="Doe"
-            error={errors.lastName?.message}
+            error={!!errors.lastName?.message}
+            errorText={errors.lastName?.message}
             {...register('lastName')}
           />
         </div>
@@ -89,7 +91,8 @@ export function RegisterPage() {
           id="email"
           type="email"
           placeholder="you@example.com"
-          error={errors.email?.message}
+          error={!!errors.email?.message}
+          errorText={errors.email?.message}
           {...register('email')}
         />
       </div>
@@ -102,7 +105,8 @@ export function RegisterPage() {
           id="password"
           type="password"
           placeholder="••••••••"
-          error={errors.password?.message}
+          error={!!errors.password?.message}
+          errorText={errors.password?.message}
           {...register('password')}
         />
       </div>
@@ -115,16 +119,17 @@ export function RegisterPage() {
           id="confirmPassword"
           type="password"
           placeholder="••••••••"
-          error={errors.confirmPassword?.message}
+          error={!!errors.confirmPassword?.message}
+          errorText={errors.confirmPassword?.message}
           {...register('confirmPassword')}
         />
       </div>
 
-      <Button 
-        type="submit" 
-        variant="primary" 
-        size="lg" 
-        fullWidth 
+      <Button
+        type="submit"
+        variant="primary"
+        size="lg"
+        fullWidth
         isLoading={isLoading}
         className="auth-form__submit"
       >

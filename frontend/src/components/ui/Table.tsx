@@ -1,5 +1,6 @@
 import React from 'react'
 import { cn } from '@/utils'
+import './Table.css'
 
 interface TableProps<T> {
   data: T[]
@@ -7,6 +8,8 @@ interface TableProps<T> {
   onRowClick?: (item: T) => void
   className?: string
   emptyMessage?: string
+  isLoading?: boolean
+  size?: 'sm' | 'md' | 'lg'
 }
 
 interface Column<T> {
@@ -14,6 +17,8 @@ interface Column<T> {
   title: string
   render?: (item: T) => React.ReactNode
   className?: string
+  width?: number | string
+  align?: 'left' | 'center' | 'right'
 }
 
 export function Table<T>({
@@ -22,6 +27,8 @@ export function Table<T>({
   onRowClick,
   className,
   emptyMessage = 'No data available',
+  isLoading = false,
+  size = 'md',
 }: TableProps<T>) {
   const safeData = Array.isArray(data) ? data : []
   const getValue = (item: T, key: string) => {
@@ -33,21 +40,48 @@ export function Table<T>({
     return value
   }
 
+  if (isLoading) {
+    return (
+      <div className={cn('tf-table-wrapper', className)}>
+        <div className="tf-table-loading">
+          <div className="tf-table-loading-spinner" />
+          <span className="tf-table-loading-text">Loading...</span>
+        </div>
+      </div>
+    )
+  }
+
   if (safeData.length === 0) {
     return (
-      <div className={cn('text-center text-muted py-5', className)}>
-        {emptyMessage}
+      <div className={cn('tf-table-wrapper', className)}>
+        <div className="tf-table-empty">
+          <div className="tf-table-empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <line x1="3" y1="9" x2="21" y2="9" />
+              <line x1="9" y1="21" x2="9" y2="9" />
+            </svg>
+          </div>
+          <p className="tf-table-empty-text">{emptyMessage}</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className={cn('table-responsive', className)}>
-      <table className="table table-hover">
+    <div className={cn('tf-table-wrapper', className)}>
+      <table className={cn('tf-table', `tf-table--${size}`)}>
         <thead>
           <tr>
             {columns.map((column) => (
-              <th key={String(column.key)} className={column.className}>
+              <th
+                key={String(column.key)}
+                className={cn(
+                  column.className,
+                  column.align && `tf-table-cell--${column.align}`
+                )}
+                style={{ width: column.width }}
+              >
                 {column.title}
               </th>
             ))}
@@ -57,11 +91,17 @@ export function Table<T>({
           {data.map((item, index) => (
             <tr
               key={index}
+              className={cn(onRowClick && 'tf-table-row--clickable')}
               onClick={() => onRowClick?.(item)}
-              style={{ cursor: onRowClick ? 'pointer' : 'default' }}
             >
               {columns.map((column) => (
-                <td key={String(column.key)} className={column.className}>
+                <td
+                  key={String(column.key)}
+                  className={cn(
+                    column.className,
+                    column.align && `tf-table-cell--${column.align}`
+                  )}
+                >
                   {column.render
                     ? column.render(item)
                     : String(getValue(item, String(column.key)))}
@@ -81,6 +121,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void
   totalItems?: number
   itemsPerPage?: number
+  size?: 'sm' | 'md'
 }
 
 export function Pagination({
@@ -89,44 +130,89 @@ export function Pagination({
   onPageChange,
   totalItems,
   itemsPerPage = 20,
+  size = 'md',
 }: PaginationProps) {
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = []
+    const maxVisible = 5
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2))
+    let endPage = Math.min(totalPages, startPage + maxVisible - 1)
+
+    if (endPage - startPage < maxVisible - 1) {
+      startPage = Math.max(1, endPage - maxVisible + 1)
+    }
+
+    if (startPage > 1) {
+      pages.push(1)
+      if (startPage > 2) {
+        pages.push('...')
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i)
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push('...')
+      }
+      pages.push(totalPages)
+    }
+
+    return pages
+  }
+
   const startItem = (currentPage - 1) * itemsPerPage + 1
   const endItem = Math.min(currentPage * itemsPerPage, totalItems || 0)
 
   return (
-    <div className="d-flex justify-content-between align-items-center">
-      {totalItems && (
-        <small className="text-muted">
-          Showing {startItem}-{endItem} of {totalItems} items
-        </small>
-      )}
-      <div className="d-flex gap-1">
+    <div className={cn('tf-pagination', `tf-pagination--${size}`)}>
+      <div className="tf-pagination-info">
+        {totalItems ? (
+          <span>Showing {startItem}-{endItem} of {totalItems} items</span>
+        ) : (
+          <span>Page {currentPage} of {totalPages}</span>
+        )}
+      </div>
+      <div className="tf-pagination-controls">
         <button
-          className="btn btn-sm btn-outline-secondary"
+          className="tf-pagination-button"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
+          aria-label="Previous page"
         >
-          Previous
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="15,18 9,12 15,6" />
+          </svg>
         </button>
-        {pages.map((page) => (
-          <button
-            key={page}
-            className={cn(
-              'btn btn-sm',
-              page === currentPage ? 'btn-primary' : 'btn-outline-secondary'
-            )}
-            onClick={() => onPageChange(page)}
-          >
-            {page}
-          </button>
+        {getPageNumbers().map((page, index) => (
+          page === '...' ? (
+            <span key={`ellipsis-${index}`} className="tf-pagination-ellipsis">…</span>
+          ) : (
+            <button
+              key={page}
+              className={cn(
+                'tf-pagination-button',
+                page === currentPage && 'tf-pagination-button--active'
+              )}
+              onClick={() => onPageChange(page as number)}
+              aria-label={`Page ${page}`}
+              aria-current={page === currentPage ? 'page' : undefined}
+            >
+              {page}
+            </button>
+          )
         ))}
         <button
-          className="btn btn-sm btn-outline-secondary"
+          className="tf-pagination-button"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
+          aria-label="Next page"
         >
-          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="9,18 15,12 9,6" />
+          </svg>
         </button>
       </div>
     </div>

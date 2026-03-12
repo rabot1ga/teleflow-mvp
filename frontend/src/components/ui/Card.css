@@ -1,75 +1,67 @@
-/**
- * TeleFlow Card Component
- * Versatile container for content
- */
-
 .tf-card {
-  background: var(--tf-bg-primary);
-  border-radius: var(--tf-radius-xl);
-  border: 1px solid var(--tf-border-primary);
-  box-shadow: var(--tf-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--tf-card-bg);
+  border: 1px solid var(--tf-card-border);
+  border-radius: var(--tf-radius-lg);
+  box-shadow: var(--tf-card-shadow);
+  transition: all var(--tf-transition-normal);
   overflow: hidden;
-  transition: all var(--tf-transition-fast);
+}
 
-  &--hoverable {
-    &:hover {
-      box-shadow: var(--tf-shadow-md);
-      transform: translateY(-2px);
-    }
-  }
+.tf-card--hoverable:hover {
+  box-shadow: var(--tf-shadow-md);
+  transform: translateY(-2px);
+}
+
+.tf-card--no-padding .tf-card__content {
+  padding: 0;
 }
 
 .tf-card__header {
-  padding: var(--tf-spacing-5) var(--tf-spacing-6);
-  border-bottom: 1px solid var(--tf-border-primary);
-  background: var(--tf-bg-secondary);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--tf-spacing-4);
+  padding: var(--tf-space-5) var(--tf-space-5) 0;
+  margin-bottom: var(--tf-space-4);
 }
 
 .tf-card__header-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-1);
   flex: 1;
-  min-width: 0;
 }
 
 .tf-card__title {
+  margin: 0;
   font-size: var(--tf-font-size-lg);
   font-weight: var(--tf-font-weight-semibold);
-  color: var(--tf-text-primary);
-  margin: 0 0 var(--tf-spacing-1) 0;
   line-height: var(--tf-line-height-tight);
+  color: var(--tf-text-primary);
 }
 
 .tf-card__subtitle {
+  margin: 0;
   font-size: var(--tf-font-size-sm);
   color: var(--tf-text-secondary);
-  margin: 0;
   line-height: var(--tf-line-height-normal);
 }
 
 .tf-card__action {
-  flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: var(--tf-spacing-2);
+  gap: var(--tf-space-2);
 }
 
-.tf-card__body {
-  padding: var(--tf-spacing-6);
-
-  &--no-padding {
-    padding: 0;
-  }
+.tf-card__content {
+  padding: 0 var(--tf-space-5) var(--tf-space-5);
+  flex: 1;
 }
 
 .tf-card__footer {
-  padding: var(--tf-spacing-4) var(--tf-spacing-6);
-  border-top: 1px solid var(--tf-border-primary);
-  background: var(--tf-bg-secondary);
-  display: flex;
-  gap: var(--tf-spacing-3);
-  justify-content: flex-end;
-  align-items: center;
+  padding: var(--tf-space-4) var(--tf-space-5);
+  margin-top: auto;
+  border-top: 1px solid var(--tf-border-secondary);
+  background-color: var(--tf-bg-surface-secondary);
 }

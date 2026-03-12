@@ -1,10 +1,11 @@
 import { ReactNode } from 'react'
 import { cn } from '@/utils'
+import './Tabs.css'
 
 interface Tab {
   id: string
   label: string
-  icon?: string
+  icon?: ReactNode
   badge?: number
   disabled?: boolean
 }
@@ -16,6 +17,7 @@ interface TabsProps {
   children?: ReactNode
   className?: string
   variant?: 'default' | 'pills' | 'underline'
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export function Tabs({
@@ -25,44 +27,37 @@ export function Tabs({
   children,
   className,
   variant = 'default',
+  size = 'md',
 }: TabsProps) {
   const selectedTab = activeTab || tabs[0]?.id
 
-  const variantClasses = {
-    default: 'nav-tabs',
-    pills: 'nav-pills',
-    underline: 'nav-underline',
-  }
-
   return (
-    <div className={className}>
-      <ul className={cn('nav', variantClasses[variant], 'mb-3')}>
+    <div className={cn('tf-tabs', className)}>
+      <div className={cn('tf-tabs-list', `tf-tabs-list--${size}`, `tf-tabs-list--${variant}`)}>
         {tabs.map((tab) => (
-          <li key={tab.id} className="nav-item">
-            <button
-              className={cn(
-                'nav-link',
-                selectedTab === tab.id && 'active',
-                tab.disabled && 'disabled'
-              )}
-              onClick={() => !tab.disabled && onChange(tab.id)}
-              disabled={tab.disabled}
-            >
-              {tab.icon && <span className="me-2">{tab.icon}</span>}
-              {tab.label}
-              {tab.badge !== undefined && (
-                <span className={cn(
-                  'badge ms-2',
-                  selectedTab === tab.id ? 'bg-light text-dark' : 'bg-secondary'
-                )}>
-                  {tab.badge}
-                </span>
-              )}
-            </button>
-          </li>
+          <button
+            key={tab.id}
+            className={cn(
+              'tf-tabs-item',
+              selectedTab === tab.id && 'tf-tabs-item--active',
+              tab.disabled && 'tf-tabs-item--disabled'
+            )}
+            onClick={() => !tab.disabled && onChange(tab.id)}
+            disabled={tab.disabled}
+            role="tab"
+            aria-selected={selectedTab === tab.id}
+          >
+            {tab.icon && <span className="tf-tabs-item-icon">{tab.icon}</span>}
+            <span className="tf-tabs-item-label">{tab.label}</span>
+            {tab.badge !== undefined && (
+              <span className={cn('tf-tabs-item-badge', selectedTab === tab.id ? 'tf-tabs-item-badge--active' : '')}>
+                {tab.badge}
+              </span>
+            )}
+          </button>
         ))}
-      </ul>
-      {children}
+      </div>
+      {children && <div className="tf-tabs-content">{children}</div>}
     </div>
   )
 }
@@ -76,6 +71,6 @@ interface TabContentProps {
 
 export function TabContent({ tabId, activeTab, children, className }: TabContentProps) {
   if (tabId !== activeTab) return null
-  
-  return <div className={className}>{children}</div>
+
+  return <div className={cn('tf-tab-content', className)}>{children}</div>
 }

@@ -1,0 +1,41 @@
+.tf-skeleton {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--tf-slate-100) 25%,
+    var(--tf-slate-200) 50%,
+    var(--tf-slate-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: tf-skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes tf-skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.tf-skeleton--circle {
+  border-radius: 50%;
+}
+
+.tf-skeleton--circular {
+  border-radius: 50%;
+}
+
+.tf-skeleton--text {
+  height: 16px;
+  border-radius: var(--tf-radius-sm);
+}
+
+.tf-skeleton--rectangular {
+  border-radius: var(--tf-radius-sm);
+}
+
+.tf-skeleton--rounded {
+  border-radius: var(--tf-radius-lg);
+}

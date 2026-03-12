@@ -81,10 +81,10 @@ export function UserbotPage() {
     },
   })
 
-  const statusMap: Record<string, 'active' | 'pending' | 'failed'> = {
+  const statusMap: Record<string, 'active' | 'pending' | 'success' | 'warning' | 'danger' | 'neutral'> = {
     'inactive': 'pending',
     'active': 'active',
-    'banned': 'failed',
+    'banned': 'danger',
     'needs_auth': 'pending',
     'needs_2fa': 'pending',
   }

@@ -1,17 +1,17 @@
 /**
- * Auth Form — Modern Design
+ * TeleFlow Auth Form — Modern Design v3.0
  */
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: var(--tf-spacing-5);
+  gap: var(--tf-space-5);
 }
 
 .auth-form__group {
   display: flex;
   flex-direction: column;
-  gap: var(--tf-spacing-2);
+  gap: var(--tf-space-2);
 }
 
 .auth-form__label {
@@ -46,13 +46,13 @@
 }
 
 .auth-form__checkbox-group {
-  padding: var(--tf-spacing-2) 0;
+  padding: var(--tf-space-2) 0;
 }
 
 .auth-form__checkbox {
   display: flex;
   align-items: center;
-  gap: var(--tf-spacing-2);
+  gap: var(--tf-space-2);
   cursor: pointer;
   user-select: none;
 }
@@ -71,17 +71,7 @@
 
 /* Submit Button */
 .auth-form__submit {
-  margin-top: var(--tf-spacing-2);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border: none !important;
-  font-weight: var(--tf-font-weight-semibold) !important;
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3) !important;
-}
-
-.auth-form__submit:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
-  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4) !important;
-  transform: translateY(-2px) !important;
+  margin-top: var(--tf-space-2);
 }
 
 .auth-form__spinner {
@@ -92,21 +82,23 @@
   border-radius: 50%;
   animation: auth-spin 0.8s linear infinite;
   display: inline-block;
-  margin-right: var(--tf-spacing-2);
+  margin-right: var(--tf-space-2);
 }
 
 @keyframes auth-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Divider */
 .auth-form__divider {
   display: flex;
   align-items: center;
-  gap: var(--tf-spacing-4);
+  gap: var(--tf-space-4);
   color: var(--tf-text-tertiary);
   font-size: var(--tf-font-size-sm);
-  margin: var(--tf-spacing-2) 0;
+  margin: var(--tf-space-2) 0;
 }
 
 .auth-form__divider::before,
@@ -114,28 +106,27 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--tf-border-primary), transparent);
+  background: var(--tf-border-primary);
 }
 
 /* Telegram Button */
 .auth-form__telegram {
-  background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%) !important;
+  background: linear-gradient(135deg, var(--tf-info-500) 0%, var(--tf-info-600) 100%) !important;
   color: white !important;
-  border: none !important;
   font-weight: var(--tf-font-weight-semibold) !important;
-  box-shadow: 0 10px 20px rgba(42, 171, 238, 0.3) !important;
+  box-shadow: var(--tf-shadow-md) !important;
 }
 
 .auth-form__telegram:hover {
-  background: linear-gradient(135deg, #229ED9 0%, #1B8AC9 100%) !important;
-  box-shadow: 0 15px 30px rgba(42, 171, 238, 0.4) !important;
+  background: linear-gradient(135deg, var(--tf-info-600) 0%, var(--tf-info-700) 100%) !important;
+  box-shadow: var(--tf-shadow-lg) !important;
   transform: translateY(-2px) !important;
 }
 
 .auth-form__telegram-icon {
   width: 20px;
   height: 20px;
-  margin-right: var(--tf-spacing-2);
+  margin-right: var(--tf-space-2);
 }
 
 /* Footer */
@@ -150,9 +141,9 @@
 .auth-alert {
   display: flex;
   align-items: center;
-  gap: var(--tf-spacing-3);
-  padding: var(--tf-spacing-4);
-  border-radius: var(--tf-radius-xl);
+  gap: var(--tf-space-3);
+  padding: var(--tf-space-4);
+  border-radius: var(--tf-radius-lg);
   font-size: var(--tf-font-size-sm);
   font-weight: var(--tf-font-weight-medium);
   animation: auth-slideDown 0.3s ease-out;
@@ -171,17 +162,18 @@
 
 .auth-alert__icon {
   font-size: var(--tf-font-size-lg);
+  flex-shrink: 0;
 }
 
 .auth-alert--error {
-  background: linear-gradient(135deg, rgba(244, 63, 94, 0.1), rgba(244, 63, 94, 0.05));
-  border: 1px solid rgba(244, 63, 94, 0.3);
+  background: var(--tf-danger-50);
+  border: 1px solid var(--tf-danger-200);
   color: var(--tf-danger-700);
 }
 
 .auth-alert--success {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--tf-success-50);
+  border: 1px solid var(--tf-success-200);
   color: var(--tf-success-700);
 }
 
@@ -189,7 +181,7 @@
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--tf-spacing-4);
+  gap: var(--tf-space-4);
 }
 
 @media (max-width: 640px) {

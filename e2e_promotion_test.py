@@ -19,7 +19,7 @@ def get_token():
     print("📝 Step 1: Getting auth token...")
     resp = requests.post(
         f"{AUTH_URL}/api/v1/auth/login",
-        json={"email": "test5@example.com", "password": "TestPassword123!"}
+        json={"email": "test@example.com", "password": "password123"}
     )
     if resp.status_code == 200:
         token = resp.json()["data"]["access_token"]

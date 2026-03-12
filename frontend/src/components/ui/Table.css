@@ -1,0 +1,219 @@
+.tf-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Table */
+.tf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--tf-font-size-sm);
+}
+
+.tf-table--sm {
+  font-size: var(--tf-font-size-xs);
+}
+
+.tf-table--md {
+  font-size: var(--tf-font-size-sm);
+}
+
+.tf-table--lg {
+  font-size: var(--tf-font-size-base);
+}
+
+/* Header */
+.tf-table thead {
+  background: var(--tf-bg-surface-secondary);
+  border-bottom: 1px solid var(--tf-border-primary);
+}
+
+.tf-table th {
+  padding: var(--tf-space-3) var(--tf-space-4);
+  font-weight: var(--tf-font-weight-semibold);
+  color: var(--tf-text-secondary);
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--tf-border-secondary);
+}
+
+/* Body */
+.tf-table tbody tr {
+  border-bottom: 1px solid var(--tf-border-secondary);
+  transition: background-color var(--tf-transition-fast);
+}
+
+.tf-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.tf-table tbody tr:hover {
+  background-color: var(--tf-bg-hover);
+}
+
+.tf-table-row--clickable {
+  cursor: pointer;
+}
+
+.tf-table td {
+  padding: var(--tf-space-3) var(--tf-space-4);
+  color: var(--tf-text-primary);
+  vertical-align: middle;
+}
+
+.tf-table-cell--left {
+  text-align: left;
+}
+
+.tf-table-cell--center {
+  text-align: center;
+}
+
+.tf-table-cell--right {
+  text-align: right;
+}
+
+/* Empty state */
+.tf-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--tf-space-12) var(--tf-space-6);
+  text-align: center;
+}
+
+.tf-table-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--tf-space-4);
+  color: var(--tf-text-tertiary);
+}
+
+.tf-table-empty-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tf-table-empty-text {
+  margin: 0;
+  font-size: var(--tf-font-size-base);
+  color: var(--tf-text-secondary);
+}
+
+/* Loading */
+.tf-table-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--tf-space-12) var(--tf-space-6);
+  gap: var(--tf-space-3);
+}
+
+.tf-table-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--tf-slate-200);
+  border-top-color: var(--tf-primary-600);
+  border-radius: 50%;
+  animation: tf-table-spin 0.8s linear infinite;
+}
+
+@keyframes tf-table-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tf-table-loading-text {
+  font-size: var(--tf-font-size-sm);
+  color: var(--tf-text-secondary);
+}
+
+/* Pagination */
+.tf-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--tf-space-4) 0;
+}
+
+.tf-pagination--sm {
+  font-size: var(--tf-font-size-xs);
+}
+
+.tf-pagination--md {
+  font-size: var(--tf-font-size-sm);
+}
+
+.tf-pagination-info {
+  color: var(--tf-text-tertiary);
+}
+
+.tf-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-space-1);
+}
+
+.tf-pagination-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 var(--tf-space-2);
+  font-family: var(--tf-font-sans);
+  font-size: var(--tf-font-size-sm);
+  font-weight: var(--tf-font-weight-medium);
+  color: var(--tf-text-secondary);
+  background: var(--tf-bg-surface);
+  border: 1px solid var(--tf-border-primary);
+  border-radius: var(--tf-radius-md);
+  cursor: pointer;
+  transition: all var(--tf-transition-fast);
+}
+
+.tf-pagination-button:hover:not(:disabled) {
+  background: var(--tf-bg-hover);
+  border-color: var(--tf-border-strong);
+}
+
+.tf-pagination-button--active {
+  background: var(--tf-primary-600);
+  border-color: var(--tf-primary-600);
+  color: white;
+}
+
+.tf-pagination-button:disabled {
+  opacity: var(--tf-opacity-disabled);
+  cursor: var(--cursor-not-allowed, not-allowed);
+  pointer-events: none;
+}
+
+.tf-pagination-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tf-pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  color: var(--tf-text-tertiary);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .tf-pagination {
+    flex-direction: column;
+    gap: var(--tf-space-3);
+    align-items: flex-start;
+  }
+
+  .tf-pagination-controls {
+    flex-wrap: wrap;
+  }
+}

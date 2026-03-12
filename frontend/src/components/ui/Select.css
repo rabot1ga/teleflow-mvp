@@ -1,0 +1,113 @@
+.tf-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-space-1);
+  width: 100%;
+}
+
+.tf-select__label {
+  font-size: var(--tf-font-size-sm);
+  font-weight: var(--tf-font-weight-medium);
+  color: var(--tf-text-primary);
+  line-height: var(--tf-line-height-snug);
+}
+
+.tf-select__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.tf-select {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--tf-space-10) 0 var(--tf-space-4);
+  font-family: var(--tf-font-sans);
+  font-size: var(--tf-font-size-base);
+  color: var(--tf-text-primary);
+  background-color: var(--tf-input-bg);
+  border: 1px solid var(--tf-input-border);
+  border-radius: var(--tf-radius-md);
+  transition: all var(--tf-transition-fast);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.tf-select:hover:not(:disabled):not(:focus) {
+  border-color: var(--tf-input-border-hover);
+}
+
+.tf-select:focus {
+  border-color: var(--tf-input-border-focus);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+.tf-select:disabled {
+  background-color: var(--tf-bg-surface-tertiary);
+  cursor: var(--cursor-not-allowed, not-allowed);
+  opacity: var(--tf-opacity-disabled);
+}
+
+.tf-select::-ms-expand {
+  display: none;
+}
+
+/* Error state */
+.tf-select-wrapper--error .tf-select {
+  border-color: var(--tf-border-error);
+}
+
+.tf-select-wrapper--error .tf-select:focus {
+  border-color: var(--tf-border-error);
+  box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.1);
+}
+
+/* Select icon */
+.tf-select__icon {
+  position: absolute;
+  right: var(--tf-space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tf-text-tertiary);
+  pointer-events: none;
+  width: 20px;
+  height: 20px;
+}
+
+.tf-select__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Hint and Error text */
+.tf-select__hint {
+  font-size: var(--tf-font-size-xs);
+  color: var(--tf-text-tertiary);
+  line-height: var(--tf-line-height-normal);
+}
+
+.tf-select__error {
+  font-size: var(--tf-font-size-xs);
+  color: var(--tf-danger-600);
+  line-height: var(--tf-line-height-normal);
+}
+
+/* Size variations */
+.tf-select--sm {
+  height: 32px;
+  padding: 0 var(--tf-space-8) 0 var(--tf-space-3);
+  font-size: var(--tf-font-size-sm);
+}
+
+.tf-select--lg {
+  height: 44px;
+  padding: 0 var(--tf-space-10) 0 var(--tf-space-5);
+  font-size: var(--tf-font-size-lg);
+}

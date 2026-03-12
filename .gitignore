@@ -75,3 +75,4 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+frontend/test-results/

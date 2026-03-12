@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { cn } from '@/utils'
+import './Modal.css'
 
 interface ModalProps {
   isOpen: boolean
@@ -7,43 +9,67 @@ interface ModalProps {
   children: React.ReactNode
   footer?: React.ReactNode
   size?: 'sm' | 'md' | 'lg' | 'xl'
+  closeOnBackdrop?: boolean
 }
 
-export function Modal({ isOpen, onClose, title, children, footer, size = 'md' }: ModalProps) {
+export function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  footer,
+  size = 'md',
+  closeOnBackdrop = true,
+}: ModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose()
+      }
+    }
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [isOpen, onClose])
+
   if (!isOpen) return null
 
-  const sizeClasses = {
-    sm: 'modal-sm',
-    md: '',
-    lg: 'modal-lg',
-    xl: 'modal-xl',
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (closeOnBackdrop && e.target === e.currentTarget) {
+      onClose()
+    }
   }
 
   return (
-    <>
-      <div className="modal-backdrop fade show" onClick={onClose} />
-      <div
-        className={cn('modal fade show d-block', sizeClasses[size])}
-        tabIndex={-1}
-        role="dialog"
-      >
-        <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">{title}</h5>
-              <button
-                type="button"
-                className="btn-close"
-                onClick={onClose}
-                aria-label="Close"
-              />
+    <div className="tf-modal-backdrop" onClick={handleBackdropClick}>
+      <div className="tf-modal">
+        <div className={cn('tf-modal-dialog', `tf-modal-dialog--${size}`)}>
+          <div className="tf-modal-content">
+            <div className="tf-modal-header">
+              <h3 className="tf-modal-title">{title}</h3>
+              <button className="tf-modal-close" onClick={onClose} aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
             </div>
-            <div className="modal-body">{children}</div>
-            {footer && <div className="modal-footer">{footer}</div>}
+            <div className="tf-modal-body">{children}</div>
+            {footer && <div className="tf-modal-footer">{footer}</div>}
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -56,6 +82,7 @@ interface ConfirmModalProps {
   confirmText?: string
   cancelText?: string
   variant?: 'danger' | 'primary'
+  isLoading?: boolean
 }
 
 export function ConfirmModal({
@@ -67,6 +94,7 @@ export function ConfirmModal({
   confirmText = 'Confirm',
   cancelText = 'Cancel',
   variant = 'primary',
+  isLoading = false,
 }: ConfirmModalProps) {
   const handleConfirm = () => {
     onConfirm()
@@ -78,18 +106,30 @@ export function ConfirmModal({
       isOpen={isOpen}
       onClose={onClose}
       title={title}
+      size="sm"
       footer={
         <>
-          <button className="btn btn-secondary" onClick={onClose}>
+          <button
+            className={cn('tf-modal-button', 'tf-modal-button--secondary')}
+            onClick={onClose}
+            disabled={isLoading}
+          >
             {cancelText}
           </button>
-          <button className={cn('btn', variant === 'danger' ? 'btn-danger' : 'btn-primary')} onClick={handleConfirm}>
-            {confirmText}
+          <button
+            className={cn(
+              'tf-modal-button',
+              variant === 'danger' ? 'tf-modal-button--danger' : 'tf-modal-button--primary'
+            )}
+            onClick={handleConfirm}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Confirming...' : confirmText}
           </button>
         </>
       }
     >
-      <p>{message}</p>
+      <p className="tf-modal-message">{message}</p>
     </Modal>
   )
 }

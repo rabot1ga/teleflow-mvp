@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Card, Button, Table, Badge, Modal, FormField, Input, Select } from '@/components/ui'
+import { Card, Button, Table, Badge, Modal, FormField, Input } from '@/components/ui'
 import { contentApi, type Source, type Article } from '@/services/contentApi'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
@@ -17,7 +17,7 @@ type SourceForm = z.infer<typeof sourceSchema>
 
 // Articles Tab Component
 function ArticlesTab({ projectId }: { projectId: string }) {
-  const { data: articles, isLoading, refetch } = useQuery({
+  const { data: articles, isLoading } = useQuery({
     queryKey: ['articles', projectId],
     queryFn: async () => {
       const response = await contentApi.getArticles({ project_id: projectId, page: 1, per_page: 50 })
@@ -54,7 +54,7 @@ function ArticlesTab({ projectId }: { projectId: string }) {
         <Badge variant={
           item.status === 'approved' ? 'success' :
           item.status === 'rejected' ? 'danger' :
-          item.status === 'published' ? 'primary' : 'secondary'
+          item.status === 'published' ? 'primary' : 'neutral'
         }>
           {item.status}
         </Badge>
@@ -88,7 +88,7 @@ function ArticlesTab({ projectId }: { projectId: string }) {
 function ModerationTab({ projectId }: { projectId: string }) {
   const queryClient = useQueryClient()
 
-  const { data: queue, isLoading, refetch } = useQuery({
+  const { data: queue, isLoading } = useQuery({
     queryKey: ['moderation-queue', projectId],
     queryFn: async () => {
       const response = await contentApi.getModerationQueue({ per_page: 50 })
@@ -188,9 +188,8 @@ export function ContentPage() {
   const [activeTab, setActiveTab] = useState<'sources' | 'articles' | 'moderation'>('sources')
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingSource, setEditingSource] = useState<Source | null>(null)
-  const [selectedSourceType, setSelectedSourceType] = useState<'rss' | 'rsshub' | 'telegram' | 'json_api'>('rss')
+  const [selectedSourceType, setSelectedSourceType] = useState<'rss' | 'telegram' | 'json_api' | 'scraper'>('rss')
   const [telegramUsername, setTelegramUsername] = useState('')
-  const [rsshubPath, setRsshubPath] = useState('')
   const queryClient = useQueryClient()
   
   // Get project_id from localStorage or use user ID as fallback
@@ -211,7 +210,7 @@ export function ContentPage() {
   console.log('🔑 Project ID:', projectId)
   console.log('📦 Auth storage:', authStorage ? JSON.parse(authStorage).state?.user : 'Not logged in')
 
-  const { data: sources, isLoading, refetch } = useQuery({
+  const { data: sources, isLoading } = useQuery({
     queryKey: ['sources', projectId],
     queryFn: async () => {
       const response = await contentApi.getSources(projectId)
@@ -368,14 +367,6 @@ export function ContentPage() {
     },
   ]
 
-  const sourceTypeOptions = [
-    { value: 'rss', label: 'RSS Feed' },
-    { value: 'json_api', label: 'JSON API' },
-    { value: 'scraper', label: 'Web Scraper' },
-    { value: 'telegram', label: 'Telegram Channel' },
-    { value: 'webhook', label: 'Webhook' },
-  ]
-
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -438,7 +429,6 @@ export function ContentPage() {
           createMutation.reset()
           setSelectedSourceType('rss')
           setTelegramUsername('')
-          setRsshubPath('')
         }}
         title="Add New Source"
         size="lg"
@@ -482,11 +472,11 @@ export function ContentPage() {
               📰 RSS Feed
             </Button>
             <Button
-              variant={selectedSourceType === 'rsshub' ? 'primary' : 'outline'}
+              variant={selectedSourceType === 'json_api' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setSelectedSourceType('rsshub')}
+              onClick={() => setSelectedSourceType('json_api')}
             >
-              🔗 RSSHub
+              🔌 JSON API
             </Button>
             <Button
               variant={selectedSourceType === 'telegram' ? 'primary' : 'outline'}
@@ -496,11 +486,11 @@ export function ContentPage() {
               ✈️ Telegram
             </Button>
             <Button
-              variant={selectedSourceType === 'json_api' ? 'primary' : 'outline'}
+              variant={selectedSourceType === 'scraper' ? 'primary' : 'outline'}
               size="sm"
-              onClick={() => setSelectedSourceType('json_api')}
+              onClick={() => setSelectedSourceType('scraper')}
             >
-              🔌 JSON API
+              🕸️ Web Scraper
             </Button>
           </div>
         </div>
@@ -513,9 +503,7 @@ export function ContentPage() {
             let url = formData.get('url') as string
             
             // Auto-generate URL based on source type
-            if (selectedSourceType === 'rsshub' && rsshubPath) {
-              url = `http://rsshub:1200/${rsshubPath.replace(/^\//, '')}`
-            } else if (selectedSourceType === 'telegram' && telegramUsername) {
+            if (selectedSourceType === 'telegram' && telegramUsername) {
               // For Telegram channels via userbot
               url = `https://t.me/${telegramUsername.replace(/^@/, '')}`
             }
@@ -530,34 +518,16 @@ export function ContentPage() {
           }}
         >
           <FormField label="Name" required>
-            <Input 
-              name="name" 
+            <Input
+              name="name"
               placeholder={
                 selectedSourceType === 'rss' ? 'My RSS Feed' :
-                selectedSourceType === 'rsshub' ? 'RSSHub Source' :
                 selectedSourceType === 'telegram' ? 'Telegram Channel' :
                 'JSON API Source'
-              } 
-              required 
+              }
+              required
             />
           </FormField>
-
-          {/* RSSHub Path Input */}
-          {selectedSourceType === 'rsshub' && (
-            <FormField label="RSSHub Path" required>
-              <Input 
-                name="rsshub_path"
-                value={rsshubPath}
-                onChange={(e) => setRsshubPath(e.target.value)}
-                placeholder="twitter/user/rabot1ga" 
-              />
-              <small className="text-muted">
-                Example: twitter/user/username, telegram/channel/durov
-                <br/>
-                Full list: <a href="https://docs.rsshub.app" target="_blank" rel="noopener noreferrer">https://docs.rsshub.app</a>
-              </small>
-            </FormField>
-          )}
 
           {/* Telegram Username Input */}
           {selectedSourceType === 'telegram' && (

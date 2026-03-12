@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Card, StatCard, Button, Table, StatusBadge, Modal, Select } from '@/components/ui'
+import { Card, StatCard, Button, Table, Badge, Modal, Select, PageHeader, Tabs } from '@/components/ui'
 import { promotionApi, type PromotionTask } from '@/services/promotionApi'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
-export function PromotionPage() {
+function TasksTab() {
   const [filterType, setFilterType] = useState<string>('')
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [selectedType, setSelectedType] = useState<string>('parse')
@@ -32,20 +32,13 @@ export function PromotionPage() {
     },
   })
 
-  const statusMap: Record<string, 'pending' | 'running' | 'completed' | 'failed'> = {
-    'pending': 'pending',
-    'running': 'running',
-    'completed': 'completed',
-    'failed': 'failed',
-    'cancelled': 'failed',
+  const statusMap: Record<string, 'success' | 'warning' | 'danger' | 'neutral'> = {
+    'pending': 'neutral',
+    'running': 'warning',
+    'completed': 'success',
+    'failed': 'danger',
+    'cancelled': 'danger',
   }
-
-  const taskTypeOptions = [
-    { value: 'parse', label: 'Parse Users' },
-    { value: 'invite', label: 'Invite Users' },
-    { value: 'masslook', label: 'Masslook' },
-    { value: 'comment', label: 'Comment' },
-  ]
 
   const columns = [
     { key: 'name', title: 'Name' },
@@ -54,7 +47,9 @@ export function PromotionPage() {
       key: 'status',
       title: 'Status',
       render: (item: PromotionTask) => (
-        <StatusBadge status={statusMap[item.status] || 'pending'} />
+        <Badge variant={statusMap[item.status] || 'neutral'}>
+          {item.status}
+        </Badge>
       ),
     },
     { key: 'success_count', title: 'Success' },
@@ -65,9 +60,9 @@ export function PromotionPage() {
       render: (item: PromotionTask) => (
         <div className="d-flex gap-2">
           {item.status === 'pending' && (
-            <Button 
-              size="sm" 
-              variant="success" 
+            <Button
+              size="sm"
+              variant="success"
               onClick={() => startMutation.mutate(item.id)}
               disabled={startMutation.isPending}
             >
@@ -82,54 +77,35 @@ export function PromotionPage() {
     },
   ]
 
+  const taskTypeOptions = [
+    { value: '', label: 'All Types' },
+    { value: 'parse', label: 'Parse' },
+    { value: 'invite', label: 'Invite' },
+    { value: 'masslook', label: 'Masslook' },
+    { value: 'comment', label: 'Comment' },
+  ]
+
   return (
-    <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="h2 mb-0">Promotion</h1>
+    <>
+      <div className="d-flex justify-content-between items-center mb-4">
+        <div>
+          <Select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            options={taskTypeOptions}
+          />
+        </div>
         <Button onClick={() => setShowCreateModal(true)}>+ Create Task</Button>
       </div>
 
-      {/* Stats */}
-      <div className="row g-4 mb-4">
-        <div className="col-md-3">
-          <StatCard title="Total Tasks" value={tasks?.length || 0} icon="📋" />
-        </div>
-        <div className="col-md-3">
-          <StatCard title="Running" value={tasks?.filter((t: PromotionTask) => t.status === 'running').length || 0} icon="🔄" />
-        </div>
-        <div className="col-md-3">
-          <StatCard title="Completed" value={tasks?.filter((t: PromotionTask) => t.status === 'completed').length || 0} icon="✅" />
-        </div>
-        <div className="col-md-3">
-          <StatCard title="Total Success" value={tasks?.reduce((sum: number, t: PromotionTask) => sum + t.success_count, 0) || 0} icon="🎉" />
-        </div>
-      </div>
-
-      {/* Filter */}
-      <div className="mb-3">
-        <select
-          className="form-select w-auto"
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-        >
-          <option value="">All Types</option>
-          <option value="parse">Parse</option>
-          <option value="invite">Invite</option>
-          <option value="masslook">Masslook</option>
-          <option value="comment">Comment</option>
-        </select>
-      </div>
-
-      {/* Tasks List */}
-      <Card title="Tasks">
+      <Card>
         {isLoading ? (
-          <div className="text-center py-5">Loading...</div>
+          <div className="text-center text-muted py-6">Loading...</div>
         ) : (
           <Table data={tasks || []} columns={columns} />
         )}
       </Card>
 
-      {/* Create Task Modal */}
       <Modal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
@@ -146,28 +122,35 @@ export function PromotionPage() {
           </>
         }
       >
-        <div className="mb-3">
-          <label className="form-label">Task Type</label>
+        <div className="mb-4">
+          <label className="tf-select__label">Task Type</label>
           <Select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            options={taskTypeOptions}
+            options={[
+              { value: 'parse', label: 'Parse Users' },
+              { value: 'invite', label: 'Invite Users' },
+              { value: 'masslook', label: 'Masslook' },
+              { value: 'comment', label: 'Comment' },
+            ]}
           />
         </div>
 
-        <div className="alert alert-info">
-          <strong>{selectedType === 'parse' && 'Parse users from a Telegram channel'}</strong>
-          <strong>{selectedType === 'invite' && 'Invite parsed users to your channel'}</strong>
-          <strong>{selectedType === 'masslook' && 'View stories from target users'}</strong>
-          <strong>{selectedType === 'comment' && 'Post comments on channel posts'}</strong>
+        <div className="bg-primary bg-opacity-10 border border-primary rounded p-4 mb-4">
+          <p className="font-semibold m-0">
+            {selectedType === 'parse' && '📊 Parse users from a Telegram channel'}
+            {selectedType === 'invite' && '👥 Invite parsed users to your channel'}
+            {selectedType === 'masslook' && '👀 View stories from target users'}
+            {selectedType === 'comment' && '💬 Post comments on channel posts'}
+          </p>
         </div>
 
-        <div className="text-center text-muted py-4">
+        <div className="text-center text-muted py-6">
           <p>Configuration form for <strong>{selectedType}</strong> task</p>
           <small>Full wizard will be implemented here</small>
         </div>
       </Modal>
-    </div>
+    </>
   )
 
   function handleCreateTask() {
@@ -179,4 +162,49 @@ export function PromotionPage() {
       config: {},
     })
   }
+}
+
+function StatsTab() {
+  return (
+    <div className="text-center text-muted py-8">
+      <svg className="mx-auto mb-4" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <line x1="18" y1="20" x2="18" y2="10" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="6" y1="20" x2="6" y2="14" />
+      </svg>
+      <p className="text-lg font-medium">Promotion statistics coming soon</p>
+      <p className="text-sm">Detailed analytics for all promotion activities</p>
+    </div>
+  )
+}
+
+export function PromotionPage() {
+  const [activeTab, setActiveTab] = useState<'tasks' | 'stats'>('tasks')
+
+  const tabs = [
+    { id: 'tasks', label: 'Tasks' },
+    { id: 'stats', label: 'Statistics' },
+  ]
+
+  return (
+    <div>
+      <PageHeader
+        title="Promotion"
+        description="Parse, invite, and engage with Telegram users"
+      />
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard title="Total Tasks" value="12" icon="📋" />
+        <StatCard title="Running" value="2" icon="🔄" />
+        <StatCard title="Completed" value="8" icon="✅" />
+        <StatCard title="Total Success" value="1,234" icon="🎉" />
+      </div>
+
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={(tab) => setActiveTab(tab as any)}>
+        {activeTab === 'tasks' && <TasksTab />}
+        {activeTab === 'stats' && <StatsTab />}
+      </Tabs>
+    </div>
+  )
 }

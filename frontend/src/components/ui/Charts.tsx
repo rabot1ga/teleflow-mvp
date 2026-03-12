@@ -2,13 +2,12 @@ import { cn } from '@/utils'
 import './Charts.css'
 
 interface SimpleChartProps {
-  data?: any[]
   title?: string
   height?: number
   className?: string
 }
 
-export function SimpleAreaChart({ data, title, height = 200, className }: SimpleChartProps) {
+export function SimpleAreaChart({ title, height = 200, className }: SimpleChartProps) {
   return (
     <div className={cn('tf-chart', className)} style={{ height }}>
       {title && <h4 className="tf-chart__title">{title}</h4>}
@@ -21,7 +20,7 @@ export function SimpleAreaChart({ data, title, height = 200, className }: Simple
   )
 }
 
-export function SimpleBarChart({ data, title, height = 200, className }: SimpleChartProps) {
+export function SimpleBarChart({ title, height = 200, className }: SimpleChartProps) {
   return (
     <div className={cn('tf-chart', className)} style={{ height }}>
       {title && <h4 className="tf-chart__title">{title}</h4>}
@@ -34,7 +33,7 @@ export function SimpleBarChart({ data, title, height = 200, className }: SimpleC
   )
 }
 
-export function SimplePieChart({ data, title, height = 200, className }: SimpleChartProps) {
+export function SimplePieChart({ title, height = 200, className }: SimpleChartProps) {
   return (
     <div className={cn('tf-chart', className)} style={{ height }}>
       {title && <h4 className="tf-chart__title">{title}</h4>}
@@ -47,7 +46,7 @@ export function SimplePieChart({ data, title, height = 200, className }: SimpleC
   )
 }
 
-export function SimpleLineChart({ data, title, height = 200, className }: SimpleChartProps) {
+export function SimpleLineChart({ title, height = 200, className }: SimpleChartProps) {
   return (
     <div className={cn('tf-chart', className)} style={{ height }}>
       {title && <h4 className="tf-chart__title">{title}</h4>}
