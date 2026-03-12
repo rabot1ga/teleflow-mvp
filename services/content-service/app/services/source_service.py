@@ -71,6 +71,7 @@ class SourceService:
         Returns:
             tuple[list[Source], int]: Sources and total count
         """
+        # Build base query
         query = select(Source).where(Source.project_id == project_id)
 
         if is_active is not None:

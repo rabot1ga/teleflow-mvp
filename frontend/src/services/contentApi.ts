@@ -33,11 +33,17 @@ export interface Article {
 export const contentApi = {
   // Sources
   getSources: (projectId: string) =>
-    apiClient.get('/api/v1/content/sources', { params: { project_id: projectId } }),
+    apiClient.get('/api/v1/content/sources', {
+      params: { project_id: projectId },
+      headers: { 'X-Project-ID': projectId },
+    }),
 
   createSource: (data: Partial<Source>) =>
     apiClient.post('/api/v1/content/sources', data, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Project-ID': data.project_id || '',
+      },
     }),
 
   updateSource: (id: string, data: Partial<Source>) =>

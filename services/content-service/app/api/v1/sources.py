@@ -2,7 +2,9 @@
 Sources API endpoints.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 
 from app.dependencies import get_async_session
 from app.schemas.source import SourceCreate, SourceList, SourceResponse, SourceUpdate
@@ -43,6 +45,7 @@ async def create_source(
     summary="List sources",
 )
 async def list_sources(
+    request: Request,
     page: int = Query(1, ge=1),
     per_page: int = Query(20, ge=1, le=100),
     is_active: bool | None = None,
@@ -52,8 +55,11 @@ async def list_sources(
 ) -> StandardResponse[SourceList]:
     """List sources with pagination."""
     skip = (page - 1) * per_page
+    # Get project_id from X-Project-ID header or fallback to user_id
+    project_id = request.headers.get("X-Project-ID") or current_user.get("user_id")
+    
     sources, total = await source_service.list_sources(
-        project_id=current_user.get("project_id", ""),
+        project_id=project_id,
         skip=skip,
         limit=per_page,
         is_active=is_active,
