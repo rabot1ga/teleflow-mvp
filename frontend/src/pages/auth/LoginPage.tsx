@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../../stores/authStore'
+import { Button, Input } from '@/components/ui'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -50,32 +51,26 @@ export function LoginPage() {
         <label htmlFor="email" className="auth-form__label">
           Email Address
         </label>
-        <input
-          type="email"
-          className={`auth-form__input ${errors.email ? 'auth-form__input--error' : ''}`}
+        <Input
           id="email"
-          {...register('email')}
+          type="email"
           placeholder="you@example.com"
+          error={errors.email?.message}
+          {...register('email')}
         />
-        {errors.email && (
-          <div className="auth-form__error">{errors.email.message}</div>
-        )}
       </div>
 
       <div className="auth-form__field">
         <label htmlFor="password" className="auth-form__label">
           Password
         </label>
-        <input
-          type="password"
-          className={`auth-form__input ${errors.password ? 'auth-form__input--error' : ''}`}
+        <Input
           id="password"
-          {...register('password')}
+          type="password"
           placeholder="••••••••"
+          error={errors.password?.message}
+          {...register('password')}
         />
-        {errors.password && (
-          <div className="auth-form__error">{errors.password.message}</div>
-        )}
       </div>
 
       <div className="auth-form__actions">
@@ -88,19 +83,15 @@ export function LoginPage() {
         </Link>
       </div>
 
-      <button
-        type="submit"
-        className="auth-form__submit"
-        disabled={isLoading}
-      >
+      <Button type="submit" variant="primary" size="lg" fullWidth isLoading={isLoading}>
         {isLoading ? 'Signing in...' : 'Sign In'}
-      </button>
+      </Button>
 
       <div className="auth-form__divider">or continue with</div>
 
-      <button type="button" className="auth-form__telegram">
+      <Button type="button" className="auth-form__telegram" fullWidth>
         <span>✈️</span> Sign in with Telegram
-      </button>
+      </Button>
 
       <div className="auth-form__footer">
         Don't have an account?{' '}

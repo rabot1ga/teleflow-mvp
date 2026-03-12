@@ -1,0 +1,99 @@
+/**
+ * Auth Form Styles
+ */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-spacing-4);
+}
+
+.auth-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-spacing-2);
+}
+
+.auth-form__label {
+  font-size: var(--tf-font-size-sm);
+  font-weight: var(--tf-font-weight-medium);
+  color: var(--tf-text-primary);
+}
+
+.auth-form__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--tf-font-size-sm);
+}
+
+.auth-form__checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-spacing-2);
+  color: var(--tf-text-secondary);
+  cursor: pointer;
+}
+
+.auth-form__link {
+  color: var(--tf-primary-600);
+  text-decoration: none;
+  font-weight: var(--tf-font-weight-medium);
+  transition: color var(--tf-transition-fast);
+}
+
+.auth-form__link:hover {
+  color: var(--tf-primary-700);
+  text-decoration: underline;
+}
+
+.auth-form__divider {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-spacing-4);
+  color: var(--tf-text-tertiary);
+  font-size: var(--tf-font-size-sm);
+  margin: var(--tf-spacing-2) 0;
+}
+
+.auth-form__divider::before,
+.auth-form__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--tf-border-primary);
+}
+
+.auth-form__telegram {
+  background: linear-gradient(135deg, #2AABEE, #229ED9) !important;
+  color: white !important;
+  font-weight: var(--tf-font-weight-semibold);
+}
+
+.auth-form__telegram:hover {
+  background: linear-gradient(135deg, #229ED9, #1B8AC9) !important;
+}
+
+.auth-form__footer {
+  text-align: center;
+  font-size: var(--tf-font-size-sm);
+  color: var(--tf-text-secondary);
+}
+
+.auth-alert {
+  padding: var(--tf-spacing-3) var(--tf-spacing-4);
+  border-radius: var(--tf-radius-lg);
+  font-size: var(--tf-font-size-sm);
+}
+
+.auth-alert--error {
+  background: var(--tf-danger-50);
+  border: 1px solid var(--tf-danger-500);
+  color: var(--tf-danger-700);
+}
+
+.auth-alert--success {
+  background: var(--tf-success-50);
+  border: 1px solid var(--tf-success-500);
+  color: var(--tf-success-700);
+}

@@ -5,6 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../../stores/authStore'
+import { Button, Input } from '@/components/ui'
+import './AuthForm.css'
 
 const registerSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -52,37 +54,29 @@ export function RegisterPage() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--tf-spacing-4)' }}>
+      <div className="grid-2">
         <div className="auth-form__field">
           <label htmlFor="firstName" className="auth-form__label">
             First Name
           </label>
-          <input
-            type="text"
-            className={`auth-form__input ${errors.firstName ? 'auth-form__input--error' : ''}`}
+          <Input
             id="firstName"
-            {...register('firstName')}
             placeholder="John"
+            error={errors.firstName?.message}
+            {...register('firstName')}
           />
-          {errors.firstName && (
-            <div className="auth-form__error">{errors.firstName.message}</div>
-          )}
         </div>
 
         <div className="auth-form__field">
           <label htmlFor="lastName" className="auth-form__label">
             Last Name
           </label>
-          <input
-            type="text"
-            className={`auth-form__input ${errors.lastName ? 'auth-form__input--error' : ''}`}
+          <Input
             id="lastName"
-            {...register('lastName')}
             placeholder="Doe"
+            error={errors.lastName?.message}
+            {...register('lastName')}
           />
-          {errors.lastName && (
-            <div className="auth-form__error">{errors.lastName.message}</div>
-          )}
         </div>
       </div>
 
@@ -90,57 +84,44 @@ export function RegisterPage() {
         <label htmlFor="email" className="auth-form__label">
           Email Address
         </label>
-        <input
-          type="email"
-          className={`auth-form__input ${errors.email ? 'auth-form__input--error' : ''}`}
+        <Input
           id="email"
-          {...register('email')}
+          type="email"
           placeholder="you@example.com"
+          error={errors.email?.message}
+          {...register('email')}
         />
-        {errors.email && (
-          <div className="auth-form__error">{errors.email.message}</div>
-        )}
       </div>
 
       <div className="auth-form__field">
         <label htmlFor="password" className="auth-form__label">
           Password
         </label>
-        <input
-          type="password"
-          className={`auth-form__input ${errors.password ? 'auth-form__input--error' : ''}`}
+        <Input
           id="password"
-          {...register('password')}
+          type="password"
           placeholder="••••••••"
+          error={errors.password?.message}
+          {...register('password')}
         />
-        {errors.password && (
-          <div className="auth-form__error">{errors.password.message}</div>
-        )}
       </div>
 
       <div className="auth-form__field">
         <label htmlFor="confirmPassword" className="auth-form__label">
           Confirm Password
         </label>
-        <input
-          type="password"
-          className={`auth-form__input ${errors.confirmPassword ? 'auth-form__input--error' : ''}`}
+        <Input
           id="confirmPassword"
-          {...register('confirmPassword')}
+          type="password"
           placeholder="••••••••"
+          error={errors.confirmPassword?.message}
+          {...register('confirmPassword')}
         />
-        {errors.confirmPassword && (
-          <div className="auth-form__error">{errors.confirmPassword.message}</div>
-        )}
       </div>
 
-      <button
-        type="submit"
-        className="auth-form__submit"
-        disabled={isLoading}
-      >
+      <Button type="submit" variant="primary" size="lg" fullWidth isLoading={isLoading}>
         {isLoading ? 'Creating account...' : 'Create Account'}
-      </button>
+      </Button>
 
       <div className="auth-form__footer">
         Already have an account?{' '}

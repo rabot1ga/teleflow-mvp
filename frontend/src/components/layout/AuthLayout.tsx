@@ -1,9 +1,12 @@
-import { Outlet, Navigate } from 'react-router-dom'
+import { useState } from 'react'
+import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../stores/authStore'
+import toast from 'react-hot-toast'
 import './AuthLayout.css'
 
 export function AuthLayout() {
-  const { isAuthenticated } = useAuthStore()
+  const navigate = useNavigate()
+  const { isAuthenticated, logout } = useAuthStore()
 
   // If already authenticated, redirect to dashboard
   if (isAuthenticated) {
@@ -18,7 +21,10 @@ export function AuthLayout() {
       <div className="auth-layout__container">
         <div className="auth-layout__card">
           <div className="auth-layout__header">
-            <div className="auth-layout__logo">⚡ TeleFlow</div>
+            <div className="auth-layout__logo">
+              <span className="auth-layout__logo-icon">⚡</span>
+              <span className="auth-layout__logo-text">TeleFlow</span>
+            </div>
             <p className="auth-layout__subtitle">
               Modular platform for Telegram channels
             </p>
