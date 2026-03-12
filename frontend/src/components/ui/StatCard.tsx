@@ -1,55 +1,53 @@
 import { cn } from '@/utils'
+import type { HTMLAttributes } from 'react'
 import './StatCard.css'
 
-interface StatCardProps {
+interface StatCardProps extends HTMLAttributes<HTMLDivElement> {
   title: string
   value: string | number
-  icon?: string
-  trend?: { value: number; isPositive: boolean }
-  className?: string
+  icon?: string | React.ReactNode
+  trend?: {
+    value: number
+    isPositive: boolean
+    label?: string
+  }
+  description?: string
 }
 
-export function StatCard({ title, value, icon, trend, className }: StatCardProps) {
+export function StatCard({
+  title,
+  value,
+  icon,
+  trend,
+  description,
+  className,
+  ...props
+}: StatCardProps) {
   return (
-    <div className={cn('tf-stat-card', className)}>
+    <div className={cn('tf-stat-card', className)} {...props}>
       <div className="tf-stat-card__header">
         <span className="tf-stat-card__title">{title}</span>
-        {icon && <span className="tf-stat-card__icon">{icon}</span>}
+        {icon && (
+          <span className="tf-stat-card__icon">
+            {typeof icon === 'string' ? icon : icon}
+          </span>
+        )}
       </div>
       <div className="tf-stat-card__value">{value}</div>
+      {description && <p className="tf-stat-card__description">{description}</p>}
       {trend && (
         <div className="tf-stat-card__trend">
-          <span className={cn('badge', trend.isPositive ? 'badge-success' : 'badge-danger')}>
-            {trend.isPositive ? '↑' : '↓'} {trend.value}%
+          <span
+            className={cn(
+              'tf-stat-card__trend-value',
+              trend.isPositive ? 'tf-stat-card__trend--positive' : 'tf-stat-card__trend--negative'
+            )}
+          >
+            {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
           </span>
-          <small className="text-muted ms-2">from last month</small>
+          {trend.label && <span className="tf-stat-card__trend-label">{trend.label}</span>}
         </div>
       )}
     </div>
-  )
-}
-
-interface StatusBadgeProps {
-  status: 'active' | 'inactive' | 'pending' | 'success' | 'error' | 'running' | 'completed'
-  className?: string
-}
-
-export function StatusBadge({ status, className }: StatusBadgeProps) {
-  const statusMap: Record<string, { label: string; variant: string }> = {
-    active: { label: 'Active', variant: 'success' },
-    inactive: { label: 'Inactive', variant: 'secondary' },
-    pending: { label: 'Pending', variant: 'warning' },
-    success: { label: 'Success', variant: 'success' },
-    error: { label: 'Error', variant: 'danger' },
-    running: { label: 'Running', variant: 'primary' },
-    completed: { label: 'Completed', variant: 'success' },
-  }
-
-  const config = statusMap[status] || statusMap.pending
-
-  return (
-    <span className={cn('badge', `badge-${config.variant}`, className)}>
-      {config.label}
-    </span>
   )
 }

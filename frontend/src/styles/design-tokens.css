@@ -1,11 +1,11 @@
 /**
- * TeleFlow Design System - Modern UI Variables
- * Based on modern design principles with focus on clarity and productivity
+ * TeleFlow Design System — CSS Variables
+ * Modern, clean, and productive UI
+ * Version: 2.0
  */
 
 :root {
-  /* ===== Color Palette ===== */
-  /* Primary - Modern Blue */
+  /* ===== Primary Colors - Modern Blue ===== */
   --tf-primary-50: #eff6ff;
   --tf-primary-100: #dbeafe;
   --tf-primary-200: #bfdbfe;
@@ -17,25 +17,43 @@
   --tf-primary-800: #1e40af;
   --tf-primary-900: #1e3a8a;
 
-  /* Success - Emerald */
+  /* ===== Success Colors - Emerald ===== */
   --tf-success-50: #ecfdf5;
+  --tf-success-100: #d1fae5;
+  --tf-success-200: #a7f3d0;
+  --tf-success-300: #6ee7b7;
+  --tf-success-400: #34d399;
   --tf-success-500: #10b981;
   --tf-success-600: #059669;
   --tf-success-700: #047857;
+  --tf-success-800: #065f46;
+  --tf-success-900: #064e3b;
 
-  /* Danger - Rose */
+  /* ===== Danger Colors - Rose ===== */
   --tf-danger-50: #fff1f2;
+  --tf-danger-100: #ffe4e6;
+  --tf-danger-200: #fecdd3;
+  --tf-danger-300: #fda4af;
+  --tf-danger-400: #fb7185;
   --tf-danger-500: #f43f5e;
   --tf-danger-600: #e11d48;
   --tf-danger-700: #be123c;
+  --tf-danger-800: #9f1239;
+  --tf-danger-900: #881337;
 
-  /* Warning - Amber */
+  /* ===== Warning Colors - Amber ===== */
   --tf-warning-50: #fffbeb;
+  --tf-warning-100: #fef3c7;
+  --tf-warning-200: #fde68a;
+  --tf-warning-300: #fcd34d;
+  --tf-warning-400: #fbbf24;
   --tf-warning-500: #f59e0b;
   --tf-warning-600: #d97706;
   --tf-warning-700: #b45309;
+  --tf-warning-800: #92400e;
+  --tf-warning-900: #78350f;
 
-  /* Neutral - Slate */
+  /* ===== Neutral Colors - Slate ===== */
   --tf-slate-50: #f8fafc;
   --tf-slate-100: #f1f5f9;
   --tf-slate-200: #e2e8f0;
@@ -52,17 +70,24 @@
   --tf-bg-secondary: #f8fafc;
   --tf-bg-tertiary: #f1f5f9;
   --tf-bg-hover: #e2e8f0;
+  --tf-bg-inverse: #0f172a;
 
   --tf-text-primary: #0f172a;
   --tf-text-secondary: #475569;
   --tf-text-tertiary: #94a3b8;
   --tf-text-inverse: #ffffff;
+  --tf-text-link: #2563eb;
+  --tf-text-link-hover: #1d4ed8;
 
   --tf-border-primary: #e2e8f0;
   --tf-border-secondary: #cbd5e1;
   --tf-border-focus: #3b82f6;
+  --tf-border-error: #f43f5e;
+  --tf-border-success: #10b981;
+  --tf-border-warning: #f59e0b;
 
   --tf-shadow-color: rgba(15, 23, 42, 0.1);
+  --tf-shadow-color-dark: rgba(15, 23, 42, 0.15);
 
   /* ===== Shadows ===== */
   --tf-shadow-xs: 0 1px 2px 0 var(--tf-shadow-color);
@@ -70,53 +95,71 @@
   --tf-shadow-md: 0 4px 6px -1px var(--tf-shadow-color), 0 2px 4px -2px var(--tf-shadow-color);
   --tf-shadow-lg: 0 10px 15px -3px var(--tf-shadow-color), 0 4px 6px -4px var(--tf-shadow-color);
   --tf-shadow-xl: 0 20px 25px -5px var(--tf-shadow-color), 0 8px 10px -6px var(--tf-shadow-color);
+  --tf-shadow-2xl: 0 25px 50px -12px var(--tf-shadow-color-dark);
 
   /* ===== Border Radius ===== */
-  --tf-radius-sm: 0.25rem;
-  --tf-radius-md: 0.375rem;
-  --tf-radius-lg: 0.5rem;
-  --tf-radius-xl: 0.75rem;
-  --tf-radius-2xl: 1rem;
+  --tf-radius-sm: 0.25rem;    /* 4px */
+  --tf-radius-md: 0.375rem;   /* 6px */
+  --tf-radius-lg: 0.5rem;     /* 8px */
+  --tf-radius-xl: 0.75rem;    /* 12px */
+  --tf-radius-2xl: 1rem;      /* 16px */
+  --tf-radius-3xl: 1.5rem;    /* 24px */
   --tf-radius-full: 9999px;
 
-  /* ===== Spacing ===== */
-  --tf-spacing-1: 0.25rem;
-  --tf-spacing-2: 0.5rem;
-  --tf-spacing-3: 0.75rem;
-  --tf-spacing-4: 1rem;
-  --tf-spacing-5: 1.25rem;
-  --tf-spacing-6: 1.5rem;
-  --tf-spacing-8: 2rem;
-  --tf-spacing-10: 2.5rem;
-  --tf-spacing-12: 3rem;
+  /* ===== Spacing Scale ===== */
+  --tf-spacing-0: 0;
+  --tf-spacing-1: 0.25rem;    /* 4px */
+  --tf-spacing-2: 0.5rem;     /* 8px */
+  --tf-spacing-3: 0.75rem;    /* 12px */
+  --tf-spacing-4: 1rem;       /* 16px */
+  --tf-spacing-5: 1.25rem;    /* 20px */
+  --tf-spacing-6: 1.5rem;     /* 24px */
+  --tf-spacing-8: 2rem;       /* 32px */
+  --tf-spacing-10: 2.5rem;    /* 40px */
+  --tf-spacing-12: 3rem;      /* 48px */
+  --tf-spacing-16: 4rem;      /* 64px */
+  --tf-spacing-20: 5rem;      /* 80px */
+  --tf-spacing-24: 6rem;      /* 96px */
 
   /* ===== Typography ===== */
-  --tf-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --tf-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --tf-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --tf-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
 
-  --tf-font-size-xs: 0.75rem;
-  --tf-font-size-sm: 0.875rem;
-  --tf-font-size-base: 1rem;
-  --tf-font-size-lg: 1.125rem;
-  --tf-font-size-xl: 1.25rem;
-  --tf-font-size-2xl: 1.5rem;
-  --tf-font-size-3xl: 1.875rem;
+  --tf-font-size-xs: 0.75rem;     /* 12px */
+  --tf-font-size-sm: 0.875rem;    /* 14px */
+  --tf-font-size-base: 1rem;      /* 16px */
+  --tf-font-size-lg: 1.125rem;    /* 18px */
+  --tf-font-size-xl: 1.25rem;     /* 20px */
+  --tf-font-size-2xl: 1.5rem;     /* 24px */
+  --tf-font-size-3xl: 1.875rem;   /* 30px */
+  --tf-font-size-4xl: 2.25rem;    /* 36px */
+  --tf-font-size-5xl: 3rem;       /* 48px */
 
   --tf-font-weight-normal: 400;
   --tf-font-weight-medium: 500;
   --tf-font-weight-semibold: 600;
   --tf-font-weight-bold: 700;
 
+  --tf-line-height-none: 1;
   --tf-line-height-tight: 1.25;
+  --tf-line-height-snug: 1.375;
   --tf-line-height-normal: 1.5;
   --tf-line-height-relaxed: 1.625;
+  --tf-line-height-loose: 2;
+
+  --tf-letter-spacing-tight: -0.025em;
+  --tf-letter-spacing-normal: 0;
+  --tf-letter-spacing-wide: 0.025em;
+  --tf-letter-spacing-wider: 0.05em;
 
   /* ===== Transitions ===== */
   --tf-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --tf-transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --tf-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --tf-transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ===== Z-Index Scale ===== */
+  --tf-z-base: 0;
   --tf-z-dropdown: 100;
   --tf-z-sticky: 200;
   --tf-z-fixed: 300;
@@ -125,6 +168,18 @@
   --tf-z-popover: 600;
   --tf-z-tooltip: 700;
   --tf-z-toast: 800;
+
+  /* ===== Breakpoints ===== */
+  --tf-breakpoint-sm: 640px;
+  --tf-breakpoint-md: 768px;
+  --tf-breakpoint-lg: 1024px;
+  --tf-breakpoint-xl: 1280px;
+  --tf-breakpoint-2xl: 1536px;
+
+  /* ===== Opacity ===== */
+  --tf-opacity-disabled: 0.5;
+  --tf-opacity-placeholder: 0.6;
+  --tf-opacity-overlay: 0.5;
 }
 
 /* ===== Dark Mode (Future) ===== */
@@ -135,6 +190,8 @@
   --tf-bg-tertiary: #334155;
   --tf-text-primary: #f8fafc;
   --tf-text-secondary: #cbd5e1;
+  --tf-text-tertiary: #64748b;
   --tf-border-primary: #334155;
+  --tf-shadow-color: rgba(0, 0, 0, 0.3);
 }
 */

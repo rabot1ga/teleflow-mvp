@@ -1,5 +1,6 @@
 /**
- * TeleFlow Button Component Styles
+ * TeleFlow Button Component
+ * Modern, accessible, and versatile button component
  */
 
 .tf-button {
@@ -16,6 +17,7 @@
   line-height: 1;
   text-align: center;
   white-space: nowrap;
+  text-decoration: none;
 
   /* Appearance */
   border: 1px solid transparent;
@@ -31,10 +33,10 @@
   }
 
   /* Disabled */
-  &:disabled,
-  &--loading {
-    opacity: 0.6;
-    cursor: not-allowed;
+  &--disabled,
+  &:disabled {
+    opacity: var(--tf-opacity-disabled);
+    cursor: var(--tf-cursor-not-allowed, not-allowed);
     pointer-events: none;
   }
 
@@ -48,6 +50,7 @@
     padding: var(--tf-spacing-1) var(--tf-spacing-2);
     font-size: var(--tf-font-size-xs);
     min-height: 24px;
+    border-radius: var(--tf-radius-md);
   }
 
   &--sm {
@@ -66,12 +69,14 @@
     padding: var(--tf-spacing-3) var(--tf-spacing-5);
     font-size: var(--tf-font-size-base);
     min-height: 44px;
+    border-radius: var(--tf-radius-xl);
   }
 
   &--xl {
     padding: var(--tf-spacing-4) var(--tf-spacing-6);
     font-size: var(--tf-font-size-lg);
     min-height: 52px;
+    border-radius: var(--tf-radius-xl);
   }
 
   /* Variants */
@@ -80,13 +85,13 @@
     color: var(--tf-text-inverse);
     box-shadow: var(--tf-shadow-sm);
 
-    &:hover:not(:disabled) {
+    &:hover:not(&--disabled) {
       background: linear-gradient(135deg, var(--tf-primary-700), var(--tf-primary-600));
       box-shadow: var(--tf-shadow-md);
       transform: translateY(-1px);
     }
 
-    &:active:not(:disabled) {
+    &:active:not(&--disabled) {
       transform: translateY(0);
     }
   }
@@ -96,7 +101,7 @@
     color: var(--tf-text-primary);
     border-color: var(--tf-border-primary);
 
-    &:hover:not(:disabled) {
+    &:hover:not(&--disabled) {
       background-color: var(--tf-bg-hover);
       border-color: var(--tf-border-secondary);
     }
@@ -105,27 +110,36 @@
   &--success {
     background: linear-gradient(135deg, var(--tf-success-600), var(--tf-success-500));
     color: var(--tf-text-inverse);
+    box-shadow: var(--tf-shadow-sm);
 
-    &:hover:not(:disabled) {
+    &:hover:not(&--disabled) {
       background: linear-gradient(135deg, var(--tf-success-700), var(--tf-success-600));
+      box-shadow: var(--tf-shadow-md);
+      transform: translateY(-1px);
     }
   }
 
   &--danger {
     background: linear-gradient(135deg, var(--tf-danger-600), var(--tf-danger-500));
     color: var(--tf-text-inverse);
+    box-shadow: var(--tf-shadow-sm);
 
-    &:hover:not(:disabled) {
+    &:hover:not(&--disabled) {
       background: linear-gradient(135deg, var(--tf-danger-700), var(--tf-danger-600));
+      box-shadow: var(--tf-shadow-md);
+      transform: translateY(-1px);
     }
   }
 
   &--warning {
     background: linear-gradient(135deg, var(--tf-warning-600), var(--tf-warning-500));
     color: var(--tf-text-inverse);
+    box-shadow: var(--tf-shadow-sm);
 
-    &:hover:not(:disabled) {
+    &:hover:not(&--disabled) {
       background: linear-gradient(135deg, var(--tf-warning-700), var(--tf-warning-600));
+      box-shadow: var(--tf-shadow-md);
+      transform: translateY(-1px);
     }
   }
 
@@ -134,7 +148,7 @@
     border-color: var(--tf-border-secondary);
     color: var(--tf-text-secondary);
 
-    &:hover:not(:disabled) {
+    &:hover:not(&--disabled) {
       background-color: var(--tf-bg-tertiary);
       border-color: var(--tf-border-primary);
       color: var(--tf-text-primary);
@@ -145,9 +159,23 @@
     background-color: transparent;
     color: var(--tf-text-secondary);
 
-    &:hover:not(:disabled) {
+    &:hover:not(&--disabled) {
       background-color: var(--tf-bg-hover);
       color: var(--tf-text-primary);
+    }
+  }
+
+  &--link {
+    background-color: transparent;
+    color: var(--tf-text-link);
+    padding-left: 0;
+    padding-right: 0;
+    border-radius: 0;
+
+    &:hover:not(&--disabled) {
+      color: var(--tf-text-link-hover);
+      text-decoration: underline;
+      background-color: transparent;
     }
   }
 
@@ -167,6 +195,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    line-height: 0;
 
     &--left {
       margin-right: var(--tf-spacing-1);
@@ -194,5 +223,17 @@
 @keyframes tf-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .tf-button {
+    transition: none;
+  }
+
+  .tf-button__spinner {
+    animation: none;
+    border: 2px solid currentColor;
   }
 }

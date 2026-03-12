@@ -1,5 +1,6 @@
 /**
- * TeleFlow StatCard Component Styles
+ * TeleFlow StatCard Component
+ * Display statistics and metrics
  */
 
 .tf-stat-card {
@@ -32,18 +33,45 @@
 
 .tf-stat-card__icon {
   font-size: var(--tf-font-size-2xl);
+  line-height: 1;
 }
 
 .tf-stat-card__value {
-  font-size: var(--tf-font-size-2xl);
+  font-size: var(--tf-font-size-3xl);
   font-weight: var(--tf-font-weight-bold);
   color: var(--tf-text-primary);
-  margin-bottom: var(--tf-spacing-2);
   line-height: var(--tf-line-height-tight);
+  margin-bottom: var(--tf-spacing-2);
+}
+
+.tf-stat-card__description {
+  font-size: var(--tf-font-size-sm);
+  color: var(--tf-text-tertiary);
+  margin: 0 0 var(--tf-spacing-3) 0;
 }
 
 .tf-stat-card__trend {
   display: flex;
   align-items: center;
   gap: var(--tf-spacing-2);
+  font-size: var(--tf-font-size-sm);
+}
+
+.tf-stat-card__trend-value {
+  font-weight: var(--tf-font-weight-semibold);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tf-spacing-1);
+}
+
+.tf-stat-card__trend--positive {
+  color: var(--tf-success-600);
+}
+
+.tf-stat-card__trend--negative {
+  color: var(--tf-danger-600);
+}
+
+.tf-stat-card__trend-label {
+  color: var(--tf-text-tertiary);
 }

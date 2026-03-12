@@ -1,5 +1,6 @@
 /**
- * TeleFlow Card Component Styles
+ * TeleFlow Card Component
+ * Versatile container for content
  */
 
 .tf-card {
@@ -8,10 +9,13 @@
   border: 1px solid var(--tf-border-primary);
   box-shadow: var(--tf-shadow-sm);
   overflow: hidden;
-  transition: box-shadow var(--tf-transition-fast);
+  transition: all var(--tf-transition-fast);
 
-  &:hover {
-    box-shadow: var(--tf-shadow-md);
+  &--hoverable {
+    &:hover {
+      box-shadow: var(--tf-shadow-md);
+      transform: translateY(-2px);
+    }
   }
 }
 
@@ -40,7 +44,7 @@
 
 .tf-card__subtitle {
   font-size: var(--tf-font-size-sm);
-  color: var(--tf-text-tertiary);
+  color: var(--tf-text-secondary);
   margin: 0;
   line-height: var(--tf-line-height-normal);
 }
@@ -67,4 +71,5 @@
   display: flex;
   gap: var(--tf-spacing-3);
   justify-content: flex-end;
+  align-items: center;
 }

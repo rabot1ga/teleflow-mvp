@@ -1,5 +1,6 @@
 /**
- * TeleFlow PageHeader Component Styles
+ * TeleFlow PageHeader Component
+ * Consistent page headers with title and description
  */
 
 .tf-page-header {
@@ -35,5 +36,18 @@
 .tf-page-header__action {
   flex-shrink: 0;
   display: flex;
+  align-items: center;
   gap: var(--tf-spacing-2);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .tf-page-header {
+    flex-direction: column;
+    gap: var(--tf-spacing-3);
+  }
+
+  .tf-page-header__title {
+    font-size: var(--tf-font-size-xl);
+  }
 }

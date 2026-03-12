@@ -1,0 +1,87 @@
+/**
+ * TeleFlow Input Component
+ * Modern text input with validation
+ */
+
+.tf-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tf-spacing-1);
+  width: 100%;
+}
+
+.tf-input-container {
+  display: flex;
+  align-items: center;
+  background: var(--tf-bg-primary);
+  border: 1px solid var(--tf-border-primary);
+  border-radius: var(--tf-radius-lg);
+  transition: all var(--tf-transition-fast);
+
+  &:focus-within {
+    border-color: var(--tf-border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  &--sm {
+    padding: var(--tf-spacing-1) var(--tf-spacing-2);
+    min-height: 32px;
+  }
+
+  &--md {
+    padding: var(--tf-spacing-2) var(--tf-spacing-3);
+    min-height: 38px;
+  }
+
+  &--lg {
+    padding: var(--tf-spacing-3) var(--tf-spacing-4);
+    min-height: 44px;
+  }
+}
+
+.tf-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--tf-font-sans);
+  font-size: var(--tf-font-size-base);
+  color: var(--tf-text-primary);
+  padding: 0;
+
+  &::placeholder {
+    color: var(--tf-text-tertiary);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &--error {
+    color: var(--tf-danger-600);
+  }
+}
+
+.tf-input__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tf-text-tertiary);
+  flex-shrink: 0;
+
+  &--left {
+    margin-right: var(--tf-spacing-2);
+  }
+
+  &--right {
+    margin-left: var(--tf-spacing-2);
+  }
+}
+
+.tf-input__error {
+  font-size: var(--tf-font-size-sm);
+  color: var(--tf-danger-600);
+  display: flex;
+  align-items: center;
+  gap: var(--tf-spacing-1);
+}

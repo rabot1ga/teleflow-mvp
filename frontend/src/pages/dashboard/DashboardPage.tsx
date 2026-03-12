@@ -1,4 +1,4 @@
-import { Card, StatCard, PageHeader } from '@/components/ui'
+import { Card, StatCard, PageHeader, Button } from '@/components/ui'
 import './DashboardPage.css'
 
 export function DashboardPage() {
@@ -7,6 +7,11 @@ export function DashboardPage() {
       <PageHeader
         title="Dashboard"
         description="Overview of your TeleFlow platform activity"
+        action={
+          <Button variant="primary" size="md">
+            📊 Refresh
+          </Button>
+        }
       />
 
       {/* Stats Grid */}
@@ -39,22 +44,18 @@ export function DashboardPage() {
       {/* Quick Actions */}
       <Card title="Quick Actions" className="mt-6">
         <div className="quick-actions">
-          <button className="btn btn-primary">
-            <span className="btn-icon">📰</span>
+          <Button variant="primary" leftIcon="📰">
             Add Source
-          </button>
-          <button className="btn btn-primary">
-            <span className="btn-icon">🎯</span>
+          </Button>
+          <Button variant="primary" leftIcon="🎯">
             Create Funnel
-          </button>
-          <button className="btn btn-primary">
-            <span className="btn-icon">📤</span>
+          </Button>
+          <Button variant="primary" leftIcon="📤">
             New Broadcast
-          </button>
-          <button className="btn btn-outline">
-            <span className="btn-icon">⚙️</span>
+          </Button>
+          <Button variant="outline" leftIcon="⚙️">
             Settings
-          </button>
+          </Button>
         </div>
       </Card>
 

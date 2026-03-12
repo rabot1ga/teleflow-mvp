@@ -17,14 +17,10 @@
   gap: var(--tf-spacing-3);
 }
 
-.quick-actions .btn {
+.quick-actions .tf-button {
   display: inline-flex;
   align-items: center;
   gap: var(--tf-spacing-2);
-}
-
-.btn-icon {
-  font-size: var(--tf-font-size-lg);
 }
 
 .grid-2 {
