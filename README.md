@@ -2,10 +2,11 @@
 
 **Модульная платформа для полного цикла работы с Telegram-каналами**
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/your-org/teleflow)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/rabot1ga/teleflow-mvp)
 [![Python](https://img.shields.io/badge/python-3.11+-green.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/fastapi-0.109+-green.svg)](https://fastapi.tiangolo.com/)
 [![Docker](https://img.shields.io/badge/docker-compose-v2-blue.svg)](https://docs.docker.com/compose/)
+[![GitHub](https://img.shields.io/github/stars/rabot1ga/teleflow-mvp?style=social)](https://github.com/rabot1ga/teleflow-mvp)
 
 ---
 
@@ -36,9 +37,9 @@
 | **Воронки** | Создание воронок для ботов, лид-магниты | ✅ Готово |
 | **Рассылки** | Массовые рассылки по базе пользователей | ✅ Готово |
 | **Юзерботы** | Управление Telegram аккаунтами, авторизация | ✅ Готово |
-| **Продвижение** | Парсинг, инвайтинг, масслукинг, комментинг | 🚧 В разработке |
-| **AI** | AI-обработка контента (rewrite, summarize) | ⏳ Запланировано |
-| **Аналитика** | Дашборды, статистика, отчёты | ⏳ Запланировано |
+| **Продвижение** | Парсинг, инвайтинг, масслукинг, комментинг | ✅ Готово |
+| **AI** | AI-обработка контента (rewrite, summarize) | ✅ Готово |
+| **Аналитика** | Дашборды, статистика, отчёты | ✅ Готово |
 
 ### Точки взаимодействия
 
