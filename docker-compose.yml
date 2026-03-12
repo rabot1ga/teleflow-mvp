@@ -1,0 +1,781 @@
+# ===========================================
+# TeleFlow Platform — Docker Compose
+# ===========================================
+
+services:
+  # -------------------------------------------
+  # API Gateway (Traefik)
+  # -------------------------------------------
+  traefik:
+    image: traefik:v2.10
+    container_name: teleflow-traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.swarmmode=false"
+      - "--entrypoints.web.address=:80"
+      - "--accesslog=true"
+      - "--log.level=INFO"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Dashboard (dev only!)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+
+  # -------------------------------------------
+  # PostgreSQL
+  # -------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: teleflow-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-teleflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}
+      POSTGRES_DB: ${POSTGRES_DB:-teleflow}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - teleflow-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-teleflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # -------------------------------------------
+  # Redis
+  # -------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: teleflow-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - teleflow-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # -------------------------------------------
+  # Meilisearch
+  # -------------------------------------------
+  meilisearch:
+    image: getmeili/meilisearch:v1.6
+    container_name: teleflow-meilisearch
+    environment:
+      MEILI_MASTER_KEY: ${MEILISEARCH_API_KEY:-dev-meilisearch-key}
+      MEILI_ENV: development
+    volumes:
+      - meilisearch_data:/meili_data
+    ports:
+      - "7700:7700"
+    networks:
+      - teleflow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # -------------------------------------------
+  # MinIO
+  # -------------------------------------------
+  minio:
+    image: minio/minio:latest
+    container_name: teleflow-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"  # API
+      - "9001:9001"  # Console
+    networks:
+      - teleflow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # -------------------------------------------
+  # Prometheus
+  # -------------------------------------------
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: teleflow-prometheus
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+    ports:
+      - "9090:9090"
+    networks:
+      - teleflow-network
+    depends_on:
+      - traefik
+
+  # -------------------------------------------
+  # Grafana
+  # -------------------------------------------
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: teleflow-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3001:3000"
+    networks:
+      - teleflow-network
+    depends_on:
+      - prometheus
+
+  # -------------------------------------------
+  # Loki (Log Aggregation)
+  # -------------------------------------------
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: teleflow-loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    networks:
+      - teleflow-network
+
+  # -------------------------------------------
+  # Shared Library (for development)
+  # -------------------------------------------
+  shared:
+    build:
+      context: ./shared/teleflow-common
+      dockerfile: Dockerfile
+    container_name: teleflow-shared
+    volumes:
+      - ./shared/teleflow-common:/app
+    networks:
+      - teleflow-network
+    profiles:
+      - dev
+
+  # -------------------------------------------
+  # Auth Service
+  # -------------------------------------------
+  auth-service:
+    build:
+      context: .
+      dockerfile: services/auth-service/Dockerfile
+    container_name: teleflow-auth-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/auth_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      AUTH_SERVICE_URL: http://auth-service:8001
+    ports:
+      - "8001:8001"
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth.rule=PathPrefix(`/api/v1/auth`)"
+      - "traefik.http.services.auth.loadbalancer.server.port=8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Content Service
+  # -------------------------------------------
+  content-service:
+    build:
+      context: .
+      dockerfile: services/content-service/Dockerfile
+    container_name: teleflow-content-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/content_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      MEILISEARCH_URL: http://meilisearch:7700
+      MEILISEARCH_API_KEY: ${MEILISEARCH_API_KEY:-dev-meilisearch-key}
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
+      MINIO_BUCKET: teleflow
+      AI_SERVICE_URL: http://ai-service:8009
+    ports:
+      - "8002:8002"
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.content.rule=PathPrefix(`/api/v1/content`)"
+      - "traefik.http.services.content.loadbalancer.server.port=8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      meilisearch:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Content Worker (Celery)
+  # -------------------------------------------
+  content-worker:
+    build:
+      context: .
+      dockerfile: services/content-service/Dockerfile
+    container_name: teleflow-content-worker
+    command: celery -A app.celery_app worker --loglevel=info --queues=content
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/content_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      MEILISEARCH_URL: http://meilisearch:7700
+      MEILISEARCH_API_KEY: ${MEILISEARCH_API_KEY:-dev-meilisearch-key}
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
+      MINIO_BUCKET: teleflow
+      AI_SERVICE_URL: http://ai-service:8009
+    networks:
+      - teleflow-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Publishing Service
+  # -------------------------------------------
+  publishing-service:
+    build:
+      context: .
+      dockerfile: services/publishing-service/Dockerfile
+    container_name: teleflow-publishing-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/publish_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      BOT_GATEWAY_URL: http://bot-gateway:8006
+    ports:
+      - "8004:8004"
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.publishing.rule=PathPrefix(`/api/v1/publishing`)"
+      - "traefik.http.services.publishing.loadbalancer.server.port=8004"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      bot-gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Publishing Worker (Celery)
+  # -------------------------------------------
+  publishing-worker:
+    build:
+      context: .
+      dockerfile: services/publishing-service/Dockerfile
+    container_name: teleflow-publishing-worker
+    command: celery -A app.celery_app worker --loglevel=info --queues=publishing
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/publish_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      BOT_GATEWAY_URL: http://bot-gateway:8006
+      CONTENT_SERVICE_URL: http://content-service:8002
+    networks:
+      - teleflow-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      bot-gateway:
+        condition: service_healthy
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Funnel Service
+  # -------------------------------------------
+  funnel-service:
+    build:
+      context: .
+      dockerfile: services/funnel-service/Dockerfile
+    container_name: teleflow-funnel-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/funnel_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      BOT_GATEWAY_URL: http://bot-gateway:8006
+    ports:
+      - "8005:8005"
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.funnel.rule=PathPrefix(`/api/v1/funnels`)"
+      - "traefik.http.services.funnel.loadbalancer.server.port=8005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      bot-gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Funnel Worker (Celery)
+  # -------------------------------------------
+  funnel-worker:
+    build:
+      context: .
+      dockerfile: services/funnel-service/Dockerfile
+    container_name: teleflow-funnel-worker
+    command: celery -A app.celery_app worker --loglevel=info --queues=funnel
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/funnel_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      BOT_GATEWAY_URL: http://bot-gateway:8006
+    networks:
+      - teleflow-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Bot Gateway
+  # -------------------------------------------
+  bot-gateway:
+    build:
+      context: .
+      dockerfile: services/bot-gateway/Dockerfile
+    container_name: teleflow-bot-gateway
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/bot_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_BOT_WEBHOOK_URL: ${TELEGRAM_BOT_WEBHOOK_URL:-http://localhost/api/v1/bot/webhook}
+      FUNNEL_SERVICE_URL: http://funnel-service:8005
+      CONTENT_SERVICE_URL: http://content-service:8002
+    ports:
+      - "8006:8006"
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bot.rule=PathPrefix(`/api/v1/bot`)"
+      - "traefik.http.services.bot.loadbalancer.server.port=8006"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8006/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Userbot Service
+  # -------------------------------------------
+  userbot-service:
+    build:
+      context: .
+      dockerfile: services/userbot-service/Dockerfile
+    container_name: teleflow-userbot-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/userbot_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      USERBOT_ENCRYPTION_KEY: ${USERBOT_ENCRYPTION_KEY:-your-32-byte-encryption-key-here!}
+    ports:
+      - "8007:8007"
+    volumes:
+      - ./services/userbot-service/app:/app/app
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.userbot.rule=PathPrefix(`/api/v1/userbot`)"
+      - "traefik.http.services.userbot.loadbalancer.server.port=8007"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    profiles:
+      - dev
+
+  # -------------------------------------------
+  # Userbot Worker (Celery)
+  # -------------------------------------------
+  userbot-worker:
+    build:
+      context: .
+      dockerfile: services/userbot-service/Dockerfile
+    container_name: teleflow-userbot-worker
+    command: celery -A app.celery_app worker --loglevel=info
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/userbot_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      USERBOT_ENCRYPTION_KEY: ${USERBOT_ENCRYPTION_KEY:-your-32-byte-encryption-key-here!}
+    networks:
+      - teleflow-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Promotion Service
+  # -------------------------------------------
+  promotion-service:
+    build:
+      context: .
+      dockerfile: services/promotion-service/Dockerfile
+    container_name: teleflow-promotion-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/promo_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      USERBOT_SERVICE_URL: http://userbot-service:8007
+    ports:
+      - "8008:8008"
+    volumes:
+      - ./services/promotion-service/app:/app/app
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.promotion.rule=PathPrefix(`/api/v1/promotion`)"
+      - "traefik.http.services.promotion.loadbalancer.server.port=8008"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      userbot-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8008/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    profiles:
+      - dev
+
+  # -------------------------------------------
+  # Promotion Worker (Celery)
+  # -------------------------------------------
+  promotion-worker:
+    build:
+      context: .
+      dockerfile: services/promotion-service/Dockerfile
+    container_name: teleflow-promotion-worker
+    command: celery -A app.celery_app worker --loglevel=info
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/promo_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      USERBOT_SERVICE_URL: http://userbot-service:8007
+    volumes:
+      - ./services/promotion-service/app:/app/app
+    networks:
+      - teleflow-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - dev
+
+  # -------------------------------------------
+  # AI Service
+  # -------------------------------------------
+  ai-service:
+    build:
+      context: .
+      dockerfile: services/ai-service/Dockerfile
+    container_name: teleflow-ai-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/ai_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-your-openai-api-key-here}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-your-anthropic-api-key-here}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+    ports:
+      - "8009:8009"
+    volumes:
+      - ./services/ai-service/app:/app/app
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ai.rule=PathPrefix(`/api/v1/ai`)"
+      - "traefik.http.services.ai.loadbalancer.server.port=8009"
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8009/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    profiles:
+      - dev
+
+  # -------------------------------------------
+  # AI Worker (Celery)
+  # -------------------------------------------
+  ai-worker:
+    build:
+      context: .
+      dockerfile: services/ai-service/Dockerfile
+    container_name: teleflow-ai-worker
+    command: celery -A app.celery_app worker --loglevel=info
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-your-openai-api-key-here}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-your-anthropic-api-key-here}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+    volumes:
+      - ./services/ai-service/app:/app/app
+    networks:
+      - teleflow-network
+    depends_on:
+      redis:
+        condition: service_healthy
+    profiles:
+      - dev
+
+  # -------------------------------------------
+  # Analytics Service
+  # -------------------------------------------
+  analytics-service:
+    build:
+      context: .
+      dockerfile: services/analytics-service/Dockerfile
+    container_name: teleflow-analytics-service
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/analytics_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+    ports:
+      - "8010:8010"
+    volumes:
+      - ./services/analytics-service/app:/app/app
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.analytics.rule=PathPrefix(`/api/v1/analytics`)"
+      - "traefik.http.services.analytics.loadbalancer.server.port=8010"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    profiles:
+      - dev
+
+  # -------------------------------------------
+  # Analytics Worker (Celery)
+  # -------------------------------------------
+  analytics-worker:
+    build:
+      context: .
+      dockerfile: services/analytics-service/Dockerfile
+    container_name: teleflow-analytics-worker
+    command: celery -A app.celery_app worker --loglevel=info
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-teleflow}:${POSTGRES_PASSWORD:-teleflow_secure_password_change_me}@postgres:5432/analytics_db
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+    volumes:
+      - ./services/analytics-service/app:/app/app
+    networks:
+      - teleflow-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - dev
+
+  # -------------------------------------------
+  # Celery Beat (Unified Scheduler)
+  # -------------------------------------------
+  celery-beat:
+    build:
+      context: .
+      dockerfile: services/celery-beat/Dockerfile
+    container_name: teleflow-celery-beat
+    command: celery -A app.celery_app beat --loglevel=info
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-me}
+    volumes:
+      - ./services/celery-beat/app:/app/app
+    networks:
+      - teleflow-network
+    depends_on:
+      redis:
+        condition: service_healthy
+    profiles:
+      - ""
+      - dev
+
+  # -------------------------------------------
+  # Frontend (React SPA)
+  # -------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: teleflow-frontend
+    environment:
+      VITE_API_BASE_URL: http://localhost/api/v1
+      VITE_WS_URL: ws://localhost/ws
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/vite.config.ts:/app/vite.config.ts
+    networks:
+      - teleflow-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+    depends_on:
+      - traefik
+    profiles:
+      - ""
+      - dev
+
+networks:
+  teleflow-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  meilisearch_data:
+  minio_data:
+  prometheus_data:
+  grafana_data:

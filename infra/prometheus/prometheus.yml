@@ -1,0 +1,68 @@
+# ===========================================
+# Prometheus Configuration
+# ===========================================
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Traefik
+  - job_name: 'traefik'
+    static_configs:
+      - targets: ['traefik:8080']
+    metrics_path: /metrics
+
+  # Auth Service
+  - job_name: 'auth-service'
+    static_configs:
+      - targets: ['auth-service:8001']
+    metrics_path: /metrics
+
+  # Content Service
+  - job_name: 'content-service'
+    static_configs:
+      - targets: ['content-service:8002']
+    metrics_path: /metrics
+
+  # Publishing Service
+  - job_name: 'publishing-service'
+    static_configs:
+      - targets: ['publishing-service:8004']
+    metrics_path: /metrics
+
+  # Funnel Service
+  - job_name: 'funnel-service'
+    static_configs:
+      - targets: ['funnel-service:8005']
+    metrics_path: /metrics
+
+  # Bot Gateway
+  - job_name: 'bot-gateway'
+    static_configs:
+      - targets: ['bot-gateway:8006']
+    metrics_path: /metrics
+
+  # Userbot Service
+  - job_name: 'userbot-service'
+    static_configs:
+      - targets: ['userbot-service:8007']
+    metrics_path: /metrics
+
+  # Promotion Service
+  - job_name: 'promotion-service'
+    static_configs:
+      - targets: ['promotion-service:8008']
+    metrics_path: /metrics
+
+  # AI Service
+  - job_name: 'ai-service'
+    static_configs:
+      - targets: ['ai-service:8009']
+    metrics_path: /metrics
+
+  # Analytics Service
+  - job_name: 'analytics-service'
+    static_configs:
+      - targets: ['analytics-service:8010']
+    metrics_path: /metrics

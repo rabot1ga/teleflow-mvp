@@ -1,0 +1,1 @@
+export { FunnelsPage } from './FunnelsPage'

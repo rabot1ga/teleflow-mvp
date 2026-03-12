@@ -1,0 +1,51 @@
+# ===========================================
+# Traefik Dynamic Configuration
+# ===========================================
+
+http:
+  middlewares:
+    # CORS middleware
+    cors-headers:
+      headers:
+        accessControlAllowMethods:
+          - "GET"
+          - "POST"
+          - "PUT"
+          - "PATCH"
+          - "DELETE"
+          - "OPTIONS"
+        accessControlAllowHeaders:
+          - "*"
+        accessControlAllowOriginList:
+          - "*"
+        accessControlMaxAge: 100
+
+    # Rate limiting (basic)
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+
+    # Security headers
+    security-headers:
+      headers:
+        X-Frame-Options: DENY
+        X-Content-Type-Options: nosniff
+        X-XSS-Protection: "1; mode=block"
+        Referrer-Policy: "strict-origin-when-cross-origin"
+
+  routers:
+    # API router with middleware
+    api-router:
+      rule: "PathPrefix(`/api`)"
+      service: api-gateway
+      middlewares:
+        - cors-headers
+        - security-headers
+
+    # WebSocket router
+    ws-router:
+      rule: "PathPrefix(`/ws`)"
+      service: ws-gateway
+      middlewares:
+        - cors-headers
