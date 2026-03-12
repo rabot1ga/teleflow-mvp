@@ -9,11 +9,11 @@ import { Button, Input } from '@/components/ui'
 import './AuthForm.css'
 
 const registerSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  firstName: z.string().min(1, 'Required'),
+  lastName: z.string().min(1, 'Required'),
+  email: z.string().email('Invalid email'),
+  password: z.string().min(8, 'Min 8 characters'),
   confirmPassword: z.string(),
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ['confirmPassword'],
@@ -38,7 +38,7 @@ export function RegisterPage() {
     try {
       setError(null)
       await registerUser(data.email, data.password, data.firstName, data.lastName)
-      toast.success('Account created successfully!')
+      toast.success('Account created!')
       navigate('/dashboard')
     } catch (err: any) {
       setError(err.message || 'Registration failed')
@@ -50,13 +50,14 @@ export function RegisterPage() {
     <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
       {error && (
         <div className="auth-alert auth-alert--error">
+          <span className="auth-alert__icon">⚠️</span>
           {error}
         </div>
       )}
 
       <div className="grid-2">
-        <div className="auth-form__field">
-          <label htmlFor="firstName" className="auth-form__label">
+        <div className="auth-form__group">
+          <label className="auth-form__label" htmlFor="firstName">
             First Name
           </label>
           <Input
@@ -67,8 +68,8 @@ export function RegisterPage() {
           />
         </div>
 
-        <div className="auth-form__field">
-          <label htmlFor="lastName" className="auth-form__label">
+        <div className="auth-form__group">
+          <label className="auth-form__label" htmlFor="lastName">
             Last Name
           </label>
           <Input
@@ -80,9 +81,9 @@ export function RegisterPage() {
         </div>
       </div>
 
-      <div className="auth-form__field">
-        <label htmlFor="email" className="auth-form__label">
-          Email Address
+      <div className="auth-form__group">
+        <label className="auth-form__label" htmlFor="email">
+          Email
         </label>
         <Input
           id="email"
@@ -93,8 +94,8 @@ export function RegisterPage() {
         />
       </div>
 
-      <div className="auth-form__field">
-        <label htmlFor="password" className="auth-form__label">
+      <div className="auth-form__group">
+        <label className="auth-form__label" htmlFor="password">
           Password
         </label>
         <Input
@@ -106,8 +107,8 @@ export function RegisterPage() {
         />
       </div>
 
-      <div className="auth-form__field">
-        <label htmlFor="confirmPassword" className="auth-form__label">
+      <div className="auth-form__group">
+        <label className="auth-form__label" htmlFor="confirmPassword">
           Confirm Password
         </label>
         <Input
@@ -119,16 +120,30 @@ export function RegisterPage() {
         />
       </div>
 
-      <Button type="submit" variant="primary" size="lg" fullWidth isLoading={isLoading}>
-        {isLoading ? 'Creating account...' : 'Create Account'}
+      <Button 
+        type="submit" 
+        variant="primary" 
+        size="lg" 
+        fullWidth 
+        isLoading={isLoading}
+        className="auth-form__submit"
+      >
+        {isLoading ? (
+          <>
+            <span className="auth-form__spinner"></span>
+            Creating account...
+          </>
+        ) : (
+          'Create Account'
+        )}
       </Button>
 
-      <div className="auth-form__footer">
+      <p className="auth-form__footer">
         Already have an account?{' '}
-        <Link to="/login" className="auth-form__link">
+        <Link to="/login" className="auth-form__link auth-form__link--bold">
           Sign in
         </Link>
-      </div>
+      </p>
     </form>
   )
 }

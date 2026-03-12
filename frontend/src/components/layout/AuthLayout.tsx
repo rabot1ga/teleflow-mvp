@@ -8,33 +8,37 @@ export function AuthLayout() {
   const navigate = useNavigate()
   const { isAuthenticated, logout } = useAuthStore()
 
-  // If already authenticated, redirect to dashboard
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />
   }
 
   return (
-    <div className="auth-layout">
-      <div className="auth-layout__bg">
-        <div className="auth-layout__gradient"></div>
+    <div className="auth-page">
+      {/* Animated Background */}
+      <div className="auth-bg">
+        <div className="auth-bg__gradient auth-bg__gradient--1"></div>
+        <div className="auth-bg__gradient auth-bg__gradient--2"></div>
+        <div className="auth-bg__gradient auth-bg__gradient--3"></div>
+        <div className="auth-bg__overlay"></div>
       </div>
-      <div className="auth-layout__container">
-        <div className="auth-layout__card">
-          <div className="auth-layout__header">
-            <div className="auth-layout__logo">
-              <span className="auth-layout__logo-icon">⚡</span>
-              <span className="auth-layout__logo-text">TeleFlow</span>
+
+      {/* Content */}
+      <div className="auth-container">
+        <div className="auth-card">
+          <div className="auth-card__header">
+            <div className="auth-card__logo">
+              <div className="auth-card__logo-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </div>
+              <span className="auth-card__logo-text">TeleFlow</span>
             </div>
-            <p className="auth-layout__subtitle">
-              Modular platform for Telegram channels
+            <p className="auth-card__subtitle">
+              Manage your Telegram channels with ease
             </p>
           </div>
           <Outlet />
-        </div>
-        <div className="auth-layout__footer">
-          <p className="text-muted">
-            © 2026 TeleFlow Platform. All rights reserved.
-          </p>
         </div>
       </div>
     </div>
