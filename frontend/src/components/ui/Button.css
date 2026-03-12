@@ -2,8 +2,6 @@
  * TeleFlow Button Component Styles
  */
 
-@import '../../styles/design-tokens.css';
-
 .tf-button {
   /* Layout */
   display: inline-flex;

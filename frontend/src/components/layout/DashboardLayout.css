@@ -3,9 +3,6 @@
  * Modern, clean, and productive layout
  */
 
-/* Import design tokens */
-@import '../../styles/design-tokens.css';
-
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
