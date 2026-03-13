@@ -1,27 +1,54 @@
-/**
- * TeleFlow StatCard Component
- * Display statistics and metrics
- */
-
 .tf-stat-card {
-  background: var(--tf-bg-primary);
-  border-radius: var(--tf-radius-xl);
-  border: 1px solid var(--tf-border-primary);
-  padding: var(--tf-spacing-5);
+  padding: var(--tf-space-6);
+  border-radius: var(--tf-radius-2xl);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: var(--tf-shadow-sm);
-  transition: all var(--tf-transition-fast);
+  transition: all var(--tf-transition-normal);
+  position: relative;
+  overflow: hidden;
+  animation: stat-card-slide-in 0.5s ease-out;
+}
 
-  &:hover {
-    box-shadow: var(--tf-shadow-md);
-    transform: translateY(-2px);
+@keyframes stat-card-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tf-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--tf-shadow-lg);
+}
+
+.tf-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(50%, -50%);
+  pointer-events: none;
 }
 
 .tf-stat-card__header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--tf-spacing-3);
+  align-items: flex-start;
+  margin-bottom: var(--tf-space-4);
+}
+
+.tf-stat-card__title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-space-2);
 }
 
 .tf-stat-card__title {
@@ -29,31 +56,41 @@
   font-weight: var(--tf-font-weight-medium);
   color: var(--tf-text-secondary);
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: var(--tf-letter-spacing-wide);
 }
 
 .tf-stat-card__icon {
-  font-size: var(--tf-font-size-2xl);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--tf-radius-lg);
+  font-size: 18px;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .tf-stat-card__value {
-  font-size: var(--tf-font-size-3xl);
+  font-size: var(--tf-font-size-4xl);
   font-weight: var(--tf-font-weight-bold);
-  color: var(--tf-text-primary);
+  margin-bottom: var(--tf-space-2);
   line-height: var(--tf-line-height-tight);
-  margin-bottom: var(--tf-spacing-2);
+  letter-spacing: var(--tf-letter-spacing-tight);
 }
 
 .tf-stat-card__description {
   font-size: var(--tf-font-size-sm);
   color: var(--tf-text-tertiary);
-  margin: 0 0 var(--tf-spacing-3) 0;
+  margin: 0 0 var(--tf-space-3) 0;
+  line-height: var(--tf-line-height-relaxed);
 }
 
 .tf-stat-card__trend {
   display: flex;
   align-items: center;
-  gap: var(--tf-spacing-2);
+  gap: var(--tf-space-2);
   font-size: var(--tf-font-size-sm);
 }
 
@@ -61,17 +98,63 @@
   font-weight: var(--tf-font-weight-semibold);
   display: inline-flex;
   align-items: center;
-  gap: var(--tf-spacing-1);
+  gap: var(--tf-space-1);
+  padding: var(--tf-space-1) var(--tf-space-2);
+  border-radius: var(--tf-radius-full);
 }
 
 .tf-stat-card__trend--positive {
-  color: var(--tf-success-600);
+  color: var(--tf-success-700);
+  background: var(--tf-success-50);
 }
 
 .tf-stat-card__trend--negative {
-  color: var(--tf-danger-600);
+  color: var(--tf-danger-700);
+  background: var(--tf-danger-50);
 }
 
 .tf-stat-card__trend-label {
   color: var(--tf-text-tertiary);
+}
+
+/* ===== Color Variants (deprecated - use inline styles now) ===== */
+.tf-stat-card--purple {
+  background: var(--tf-gradient-primary-light);
+}
+
+.tf-stat-card--blue {
+  background: var(--tf-gradient-accent);
+}
+
+.tf-stat-card--green {
+  background: var(--tf-gradient-success);
+}
+
+.tf-stat-card--orange {
+  background: var(--tf-gradient-warm);
+}
+
+.tf-stat-card--red {
+  background: var(--tf-gradient-danger);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .tf-stat-card {
+    padding: var(--tf-space-5);
+  }
+
+  .tf-stat-card__value {
+    font-size: var(--tf-font-size-3xl);
+  }
+}
+
+@media (max-width: 640px) {
+  .tf-stat-card {
+    padding: var(--tf-space-4);
+  }
+
+  .tf-stat-card__value {
+    font-size: var(--tf-font-size-2xl);
+  }
 }
