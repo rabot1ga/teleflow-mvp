@@ -1,23 +1,35 @@
 /**
- * TeleFlow Design System — CSS Variables
- * Modern, clean, and productive UI
- * Version: 3.0 (Redesign 2026)
+ * TeleFlow Design System v3.0 — Premium UI/UX
+ * Modern, clean, and beautiful SaaS design
+ * Inspired by: Vercel, Linear, Stripe, Raycast
  */
 
 :root {
-  /* ===== Primary Colors - Modern Blue ===== */
-  --tf-primary-50: #eff6ff;
-  --tf-primary-100: #dbeafe;
-  --tf-primary-200: #bfdbfe;
-  --tf-primary-300: #93c5fd;
-  --tf-primary-400: #60a5fa;
-  --tf-primary-500: #3b82f6;
-  --tf-primary-600: #2563eb;
-  --tf-primary-700: #1d4ed8;
-  --tf-primary-800: #1e40af;
-  --tf-primary-900: #1e3a8a;
+  /* ===== Primary Colors - Deep Blue/Purple Gradient ===== */
+  --tf-primary-50: #f5f3ff;
+  --tf-primary-100: #ede9fe;
+  --tf-primary-200: #ddd6fe;
+  --tf-primary-300: #c4b5fd;
+  --tf-primary-400: #a78bfa;
+  --tf-primary-500: #8b5cf6;
+  --tf-primary-600: #7c3aed;
+  --tf-primary-700: #6d28d9;
+  --tf-primary-800: #5b21b6;
+  --tf-primary-900: #4c1d95;
 
-  /* ===== Success Colors - Emerald ===== */
+  /* ===== Accent - Vibrant Blue ===== */
+  --tf-accent-50: #eff6ff;
+  --tf-accent-100: #dbeafe;
+  --tf-accent-200: #bfdbfe;
+  --tf-accent-300: #93c5fd;
+  --tf-accent-400: #60a5fa;
+  --tf-accent-500: #3b82f6;
+  --tf-accent-600: #2563eb;
+  --tf-accent-700: #1d4ed8;
+  --tf-accent-800: #1e40af;
+  --tf-accent-900: #1e3a8a;
+
+  /* ===== Success - Emerald Green ===== */
   --tf-success-50: #ecfdf5;
   --tf-success-100: #d1fae5;
   --tf-success-200: #a7f3d0;
@@ -29,7 +41,7 @@
   --tf-success-800: #065f46;
   --tf-success-900: #064e3b;
 
-  /* ===== Danger Colors - Rose ===== */
+  /* ===== Danger - Rose Red ===== */
   --tf-danger-50: #fff1f2;
   --tf-danger-100: #ffe4e6;
   --tf-danger-200: #fecdd3;
@@ -41,7 +53,7 @@
   --tf-danger-800: #9f1239;
   --tf-danger-900: #881337;
 
-  /* ===== Warning Colors - Amber ===== */
+  /* ===== Warning - Amber ===== */
   --tf-warning-50: #fffbeb;
   --tf-warning-100: #fef3c7;
   --tf-warning-200: #fde68a;
@@ -53,96 +65,69 @@
   --tf-warning-800: #92400e;
   --tf-warning-900: #78350f;
 
-  /* ===== Info Colors - Sky ===== */
-  --tf-info-50: #f0f9ff;
-  --tf-info-100: #e0f2fe;
-  --tf-info-200: #bae6fd;
-  --tf-info-300: #7dd3fc;
-  --tf-info-400: #38bdf8;
-  --tf-info-500: #0ea5e9;
-  --tf-info-600: #0284c7;
-  --tf-info-700: #0369a1;
-  --tf-info-800: #075985;
-  --tf-info-900: #0c4a6e;
-
-  /* ===== Neutral Colors - Slate ===== */
-  --tf-slate-50: #f8fafc;
-  --tf-slate-100: #f1f5f9;
-  --tf-slate-200: #e2e8f0;
-  --tf-slate-300: #cbd5e1;
-  --tf-slate-400: #94a3b8;
-  --tf-slate-500: #64748b;
-  --tf-slate-600: #475569;
-  --tf-slate-700: #334155;
-  --tf-slate-800: #1e293b;
-  --tf-slate-900: #0f172a;
+  /* ===== Neutral - Cool Gray ===== */
+  --tf-gray-0: #ffffff;
+  --tf-gray-50: #f9fafb;
+  --tf-gray-100: #f3f4f6;
+  --tf-gray-200: #e5e7eb;
+  --tf-gray-300: #d1d5db;
+  --tf-gray-400: #9ca3af;
+  --tf-gray-500: #6b7280;
+  --tf-gray-600: #4b5563;
+  --tf-gray-700: #374151;
+  --tf-gray-800: #1f2937;
+  --tf-gray-900: #111827;
 
   /* ===== Background Colors ===== */
-  --tf-bg-app: #f6f8fb;
+  --tf-bg-app: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
   --tf-bg-surface: #ffffff;
-  --tf-bg-surface-secondary: #f8fafc;
-  --tf-bg-surface-tertiary: #f1f5f9;
-  --tf-bg-hover: #eef2f7;
-  --tf-bg-active: #e7eef8;
-  --tf-bg-inverse: #0f172a;
-  --tf-bg-overlay: rgba(15, 23, 42, 0.48);
+  --tf-bg-surface-secondary: #f9fafb;
+  --tf-bg-surface-tertiary: #f3f4f6;
+  --tf-bg-hover: #f9fafb;
+  --tf-bg-active: #f3f4f6;
+  --tf-bg-inverse: #111827;
+  --tf-bg-overlay: rgba(17, 24, 39, 0.6);
 
   /* ===== Text Colors ===== */
-  --tf-text-primary: #0f172a;
-  --tf-text-secondary: #334155;
-  --tf-text-tertiary: #64748b;
-  --tf-text-quaternary: #94a3b8;
+  --tf-text-primary: #111827;
+  --tf-text-secondary: #4b5563;
+  --tf-text-tertiary: #9ca3af;
+  --tf-text-quaternary: #d1d5db;
   --tf-text-inverse: #ffffff;
-  --tf-text-link: #2563eb;
-  --tf-text-link-hover: #1d4ed8;
+  --tf-text-link: #7c3aed;
+  --tf-text-link-hover: #6d28d9;
 
   /* ===== Border Colors ===== */
-  --tf-border-primary: #e2e8f0;
-  --tf-border-secondary: #edf2f7;
-  --tf-border-strong: #cbd5e1;
-  --tf-border-focus: #93c5fd;
+  --tf-border-primary: #e5e7eb;
+  --tf-border-secondary: #f3f4f6;
+  --tf-border-strong: #d1d5db;
+  --tf-border-focus: #a78bfa;
   --tf-border-error: #f43f5e;
   --tf-border-success: #10b981;
   --tf-border-warning: #f59e0b;
-  --tf-border-info: #0ea5e9;
 
-  /* ===== Shadow Colors ===== */
-  --tf-shadow-color: rgba(15, 23, 42, 0.06);
-  --tf-shadow-color-dark: rgba(15, 23, 42, 0.12);
+  /* ===== Premium Shadows ===== */
+  --tf-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --tf-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --tf-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --tf-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --tf-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --tf-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --tf-shadow-glow: 0 0 40px rgba(124, 58, 237, 0.3);
+  --tf-shadow-glow-sm: 0 0 20px rgba(124, 58, 237, 0.2);
+  --tf-shadow-focus: 0 0 0 4px rgba(124, 58, 237, 0.15);
 
-  /* ===== Shadows ===== */
-  --tf-shadow-xs: 0 1px 2px 0 var(--tf-shadow-color);
-  --tf-shadow-sm: 0 2px 6px var(--tf-shadow-color);
-  --tf-shadow-md: 0 8px 24px var(--tf-shadow-color);
-  --tf-shadow-lg: 0 16px 40px var(--tf-shadow-color);
-  --tf-shadow-xl: 0 24px 60px var(--tf-shadow-color-dark);
-  --tf-shadow-2xl: 0 32px 80px var(--tf-shadow-color-dark);
-  --tf-shadow-focus: 0 0 0 4px rgba(59, 130, 246, 0.15);
-  --tf-shadow-inner: inset 0 2px 4px 0 var(--tf-shadow-color);
-
-  /* ===== Border Radius ===== */
-  --tf-radius-xs: 6px;
-  --tf-radius-sm: 8px;
-  --tf-radius-md: 12px;
-  --tf-radius-lg: 16px;
-  --tf-radius-xl: 20px;
-  --tf-radius-2xl: 24px;
-  --tf-radius-3xl: 32px;
-  --tf-radius-full: 9999px;
-
-  /* ===== Spacing Scale ===== */
-  --tf-space-1: 4px;
-  --tf-space-2: 8px;
-  --tf-space-3: 12px;
-  --tf-space-4: 16px;
-  --tf-space-5: 20px;
-  --tf-space-6: 24px;
-  --tf-space-8: 32px;
-  --tf-space-10: 40px;
-  --tf-space-12: 48px;
-  --tf-space-16: 64px;
-  --tf-space-20: 80px;
-  --tf-space-24: 96px;
+  /* ===== Premium Gradients ===== */
+  --tf-gradient-primary: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  --tf-gradient-primary-light: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  --tf-gradient-accent: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --tf-gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --tf-gradient-danger: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  --tf-gradient-warm: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --tf-gradient-ocean: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  --tf-gradient-sunset: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  --tf-gradient-bg: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 50%, #f3f4f6 100%);
+  --tf-gradient-auth: linear-gradient(135deg, #7c3aed 0%, #3b82f6 50%, #06b6d4 100%);
 
   /* ===== Typography ===== */
   --tf-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -165,10 +150,10 @@
   --tf-font-weight-bold: 700;
 
   --tf-line-height-none: 1;
-  --tf-line-height-tight: 1.2;
-  --tf-line-height-snug: 1.35;
+  --tf-line-height-tight: 1.25;
+  --tf-line-height-snug: 1.375;
   --tf-line-height-normal: 1.5;
-  --tf-line-height-relaxed: 1.65;
+  --tf-line-height-relaxed: 1.625;
   --tf-line-height-loose: 2;
 
   --tf-letter-spacing-tight: -0.025em;
@@ -176,29 +161,75 @@
   --tf-letter-spacing-wide: 0.025em;
   --tf-letter-spacing-wider: 0.05em;
 
-  /* ===== Transitions ===== */
+  /* ===== Spacing Scale ===== */
+  --tf-space-0: 0;
+  --tf-space-px: 1px;
+  --tf-space-0.5: 0.125rem;  /* 2px */
+  --tf-space-1: 0.25rem;     /* 4px */
+  --tf-space-1.5: 0.375rem;  /* 6px */
+  --tf-space-2: 0.5rem;      /* 8px */
+  --tf-space-2.5: 0.625rem;  /* 10px */
+  --tf-space-3: 0.75rem;     /* 12px */
+  --tf-space-3.5: 0.875rem;  /* 14px */
+  --tf-space-4: 1rem;        /* 16px */
+  --tf-space-5: 1.25rem;     /* 20px */
+  --tf-space-6: 1.5rem;      /* 24px */
+  --tf-space-7: 1.75rem;     /* 28px */
+  --tf-space-8: 2rem;        /* 32px */
+  --tf-space-9: 2.25rem;     /* 36px */
+  --tf-space-10: 2.5rem;     /* 40px */
+  --tf-space-11: 2.75rem;    /* 44px */
+  --tf-space-12: 3rem;       /* 48px */
+  --tf-space-14: 3.5rem;     /* 56px */
+  --tf-space-16: 4rem;       /* 64px */
+  --tf-space-20: 5rem;       /* 80px */
+  --tf-space-24: 6rem;       /* 96px */
+  --tf-space-28: 7rem;       /* 112px */
+  --tf-space-32: 8rem;       /* 128px */
+
+  /* ===== Border Radius - Smooth & Modern ===== */
+  --tf-radius-none: 0;
+  --tf-radius-sm: 0.25rem;    /* 4px */
+  --tf-radius-md: 0.375rem;   /* 6px */
+  --tf-radius-lg: 0.5rem;     /* 8px */
+  --tf-radius-xl: 0.75rem;    /* 12px */
+  --tf-radius-2xl: 1rem;      /* 16px */
+  --tf-radius-3xl: 1.5rem;    /* 24px */
+  --tf-radius-4xl: 2rem;      /* 32px */
+  --tf-radius-full: 9999px;
+
+  /* ===== Transitions & Animations ===== */
+  --tf-transition-instant: 75ms cubic-bezier(0.4, 0, 0.2, 1);
   --tf-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --tf-transition-normal: 220ms cubic-bezier(0.4, 0, 0.2, 1);
-  --tf-transition-slow: 320ms cubic-bezier(0.4, 0, 0.2, 1);
+  --tf-transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --tf-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --tf-transition-slower: 500ms cubic-bezier(0.4, 0, 0.2, 1);
   --tf-transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --tf-animate-in: fadeIn 0.2s ease-out;
+  --tf-animate-out: fadeOut 0.2s ease-in;
+  --tf-animate-slide-in: slideIn 0.3s ease-out;
+  --tf-animate-slide-out: slideOut 0.3s ease-in;
+  --tf-animate-scale-in: scaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ===== Z-Index Scale ===== */
   --tf-z-base: 0;
-  --tf-z-dropdown: 1000;
-  --tf-z-sticky: 1020;
-  --tf-z-fixed: 1030;
-  --tf-z-overlay: 1040;
-  --tf-z-modal: 1050;
-  --tf-z-modal-backdrop: 1045;
-  --tf-z-popover: 1060;
-  --tf-z-tooltip: 1070;
-  --tf-z-toast: 1080;
+  --tf-z-dropdown: 100;
+  --tf-z-sticky: 200;
+  --tf-z-fixed: 300;
+  --tf-z-overlay-backdrop: 400;
+  --tf-z-overlay: 500;
+  --tf-z-modal: 600;
+  --tf-z-popover: 700;
+  --tf-z-tooltip: 800;
+  --tf-z-toast: 900;
 
   /* ===== Layout ===== */
-  --tf-sidebar-width: 272px;
-  --tf-sidebar-width-collapsed: 88px;
+  --tf-sidebar-width: 280px;
+  --tf-sidebar-width-collapsed: 80px;
   --tf-header-height: 64px;
   --tf-content-max-width: 1440px;
+  --tf-content-padding: var(--tf-space-8);
 
   /* ===== Breakpoints ===== */
   --tf-breakpoint-sm: 640px;
@@ -210,79 +241,168 @@
   /* ===== Opacity ===== */
   --tf-opacity-disabled: 0.5;
   --tf-opacity-placeholder: 0.6;
-  --tf-opacity-overlay: 0.5;
-  --tf-opacity-backdrop: 0.48;
+  --tf-opacity-overlay: 0.6;
+  --tf-opacity-backdrop: 0.7;
 
   /* ===== Semantic Tokens ===== */
-  --tf-page-bg: var(--tf-bg-app);
+  --tf-page-bg: var(--tf-gray-50);
   --tf-card-bg: var(--tf-bg-surface);
   --tf-card-border: var(--tf-border-secondary);
   --tf-card-shadow: var(--tf-shadow-sm);
+  --tf-card-hover-shadow: var(--tf-shadow-lg);
 
-  --tf-input-bg: #ffffff;
+  --tf-input-bg: var(--tf-bg-surface);
   --tf-input-border: var(--tf-border-primary);
-  --tf-input-border-hover: var(--tf-border-strong, #cbd5e1);
-  --tf-input-border-focus: var(--tf-primary-300);
-  --tf-input-border-error: var(--tf-border-error);
+  --tf-input-border-hover: var(--tf-border-strong);
+  --tf-input-border-focus: var(--tf-primary-400);
+  --tf-input-border-error: var(--tf-danger-500);
+  --tf-input-shadow-focus: 0 0 0 4px rgba(124, 58, 237, 0.1);
 
-  --tf-sidebar-bg: rgba(255, 255, 255, 0.82);
-  --tf-sidebar-border: rgba(226, 232, 240, 0.9);
-  --tf-header-bg: rgba(255, 255, 255, 0.78);
-  --tf-header-border: rgba(226, 232, 240, 0.8);
+  --tf-sidebar-bg: rgba(255, 255, 255, 0.95);
+  --tf-sidebar-border: rgba(229, 231, 235, 0.5);
+  --tf-header-bg: rgba(255, 255, 255, 0.95);
+  --tf-header-border: rgba(229, 231, 235, 0.5);
 
   --tf-badge-success-bg: var(--tf-success-50);
   --tf-badge-success-text: var(--tf-success-700);
+  --tf-badge-success-border: var(--tf-success-200);
   --tf-badge-warning-bg: var(--tf-warning-50);
   --tf-badge-warning-text: var(--tf-warning-700);
+  --tf-badge-warning-border: var(--tf-warning-200);
   --tf-badge-danger-bg: var(--tf-danger-50);
   --tf-badge-danger-text: var(--tf-danger-700);
-  --tf-badge-info-bg: var(--tf-info-50);
-  --tf-badge-info-text: var(--tf-info-700);
-  --tf-badge-neutral-bg: var(--tf-slate-100);
-  --tf-badge-neutral-text: var(--tf-slate-700);
+  --tf-badge-danger-border: var(--tf-danger-200);
+  --tf-badge-info-bg: var(--tf-accent-50);
+  --tf-badge-info-text: var(--tf-accent-700);
+  --tf-badge-info-border: var(--tf-accent-200);
+  --tf-badge-neutral-bg: var(--tf-gray-100);
+  --tf-badge-neutral-text: var(--tf-gray-700);
+  --tf-badge-neutral-border: var(--tf-gray-200);
+
+  /* ===== Backdrop Blur ===== */
+  --tf-backdrop-blur-sm: blur(4px);
+  --tf-backdrop-blur: blur(8px);
+  --tf-backdrop-blur-md: blur(12px);
+  --tf-backdrop-blur-lg: blur(16px);
+  --tf-backdrop-blur-xl: blur(24px);
 }
 
 /* ===== Dark Mode (Future) ===== */
 [data-theme='dark'] {
-  --tf-bg-app: #0b1220;
-  --tf-bg-surface: #111827;
-  --tf-bg-surface-secondary: #172033;
-  --tf-bg-surface-tertiary: #1e293b;
-  --tf-bg-hover: #1f2a3c;
-  --tf-bg-active: #243247;
-  --tf-bg-inverse: #ffffff;
-  --tf-bg-overlay: rgba(0, 0, 0, 0.6);
+  --tf-bg-app: #0f172a;
+  --tf-bg-surface: #1e293b;
+  --tf-bg-surface-secondary: #334155;
+  --tf-bg-surface-tertiary: #475569;
+  --tf-bg-hover: #334155;
+  --tf-bg-active: #475569;
+  --tf-bg-inverse: #f9fafb;
 
-  --tf-text-primary: #f8fafc;
-  --tf-text-secondary: #e2e8f0;
-  --tf-text-tertiary: #94a3b8;
-  --tf-text-quaternary: #64748b;
-  --tf-text-inverse: #0f172a;
-  --tf-text-link: #60a5fa;
-  --tf-text-link-hover: #93c5fd;
+  --tf-text-primary: #f9fafb;
+  --tf-text-secondary: #e5e7eb;
+  --tf-text-tertiary: #9ca3af;
+  --tf-text-quaternary: #6b7280;
+  --tf-text-inverse: #111827;
+  --tf-text-link: #a78bfa;
+  --tf-text-link-hover: #c4b5fd;
 
-  --tf-border-primary: #243041;
-  --tf-border-secondary: #1f2937;
-  --tf-border-strong: #334155;
-  --tf-border-focus: #60a5fa;
+  --tf-border-primary: #334155;
+  --tf-border-secondary: #475569;
+  --tf-border-strong: #6b7280;
+  --tf-border-focus: #a78bfa;
 
-  --tf-shadow-color: rgba(0, 0, 0, 0.28);
-  --tf-shadow-color-dark: rgba(0, 0, 0, 0.4);
+  --tf-shadow-color: rgba(0, 0, 0, 0.4);
+  --tf-shadow-xs: 0 1px 2px 0 var(--tf-shadow-color);
+  --tf-shadow-sm: 0 1px 3px 0 var(--tf-shadow-color), 0 1px 2px -1px var(--tf-shadow-color);
+  --tf-shadow-md: 0 4px 6px -1px var(--tf-shadow-color), 0 2px 4px -2px var(--tf-shadow-color);
+  --tf-shadow-lg: 0 10px 15px -3px var(--tf-shadow-color), 0 4px 6px -4px var(--tf-shadow-color);
+  --tf-shadow-xl: 0 20px 25px -5px var(--tf-shadow-color), 0 8px 10px -6px var(--tf-shadow-color);
+  --tf-shadow-2xl: 0 25px 50px -12px var(--tf-shadow-color);
 
   --tf-card-bg: var(--tf-bg-surface);
-  --tf-card-border: var(--tf-border-secondary);
-  --tf-card-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  --tf-card-border: var(--tf-border-primary);
+  --tf-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 
-  --tf-input-bg: #0f172a;
+  --tf-input-bg: var(--tf-bg-surface-tertiary);
   --tf-input-border: var(--tf-border-primary);
   --tf-input-border-hover: var(--tf-border-strong);
-  --tf-input-border-focus: var(--tf-primary-400);
+  --tf-input-border-focus: var(--tf-primary-500);
 
-  --tf-sidebar-bg: rgba(17, 24, 39, 0.84);
-  --tf-sidebar-border: rgba(51, 65, 85, 0.8);
-  --tf-header-bg: rgba(17, 24, 39, 0.78);
-  --tf-header-border: rgba(51, 65, 85, 0.8);
+  --tf-sidebar-bg: rgba(30, 41, 59, 0.95);
+  --tf-sidebar-border: rgba(51, 65, 85, 0.5);
+  --tf-header-bg: rgba(30, 41, 59, 0.95);
+  --tf-header-border: rgba(51, 65, 85, 0.5);
 
-  --tf-badge-neutral-bg: #1e293b;
-  --tf-badge-neutral-text: #e2e8f0;
+  --tf-badge-neutral-bg: #334155;
+  --tf-badge-neutral-text: #e5e7eb;
+}
+
+/* ===== Keyframe Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/utils'
 import './Button.css'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'success' | 'danger' | 'warning'

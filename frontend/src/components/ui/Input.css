@@ -1,7 +1,7 @@
 .tf-input-wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--tf-space-1);
+  gap: var(--tf-space-1.5);
   width: 100%;
 }
 
@@ -10,6 +10,7 @@
   font-weight: var(--tf-font-weight-medium);
   color: var(--tf-text-primary);
   line-height: var(--tf-line-height-snug);
+  letter-spacing: var(--tf-letter-spacing-wide);
 }
 
 .tf-input__container {
@@ -28,8 +29,9 @@
   color: var(--tf-text-primary);
   background-color: var(--tf-input-bg);
   border: 1px solid var(--tf-input-border);
-  border-radius: var(--tf-radius-md);
+  border-radius: var(--tf-radius-lg);
   transition: all var(--tf-transition-fast);
+  -webkit-font-smoothing: antialiased;
 }
 
 .tf-input::placeholder {
@@ -42,7 +44,8 @@
 
 .tf-input:focus {
   border-color: var(--tf-input-border-focus);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  box-shadow: var(--tf-input-shadow-focus);
+  outline: none;
 }
 
 .tf-input:disabled {
@@ -53,18 +56,12 @@
 
 /* Error state */
 .tf-input-wrapper--error .tf-input {
-  border-color: var(--tf-border-error);
+  border-color: var(--tf-input-border-error);
 }
 
 .tf-input-wrapper--error .tf-input:focus {
-  border-color: var(--tf-border-error);
+  border-color: var(--tf-input-border-error);
   box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.1);
-}
-
-/* Disabled state */
-.tf-input-wrapper--disabled {
-  opacity: var(--tf-opacity-disabled);
-  pointer-events: none;
 }
 
 /* Icons */
@@ -75,6 +72,7 @@
   justify-content: center;
   color: var(--tf-text-tertiary);
   pointer-events: none;
+  transition: color var(--tf-transition-fast);
 }
 
 .tf-input__icon svg,
@@ -99,6 +97,10 @@
   padding-right: var(--tf-space-10);
 }
 
+.tf-input:focus + .tf-input__icon {
+  color: var(--tf-primary-500);
+}
+
 /* Hint and Error text */
 .tf-input__hint {
   font-size: var(--tf-font-size-xs);
@@ -110,6 +112,7 @@
   font-size: var(--tf-font-size-xs);
   color: var(--tf-danger-600);
   line-height: var(--tf-line-height-normal);
+  font-weight: var(--tf-font-weight-medium);
 }
 
 /* Size variations */
@@ -123,4 +126,28 @@
   height: 44px;
   padding: 0 var(--tf-space-5);
   font-size: var(--tf-font-size-lg);
+}
+
+/* Floating label variant (future enhancement) */
+.tf-input--floating-label {
+  padding-top: var(--tf-space-4);
+}
+
+.tf-input--floating-label + .tf-input__label {
+  position: absolute;
+  left: var(--tf-space-4);
+  top: var(--tf-space-2);
+  font-size: var(--tf-font-size-xs);
+  color: var(--tf-text-tertiary);
+  pointer-events: none;
+  transition: all var(--tf-transition-fast);
+}
+
+.tf-input--floating-label:focus + .tf-input__label,
+.tf-input--floating-label:not(:placeholder-shown) + .tf-input__label {
+  top: -var(--tf-space-1);
+  font-size: var(--tf-font-size-2xs);
+  color: var(--tf-primary-600);
+  background: var(--tf-bg-surface);
+  padding: 0 var(--tf-space-1);
 }
