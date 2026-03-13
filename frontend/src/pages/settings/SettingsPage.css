@@ -1,0 +1,130 @@
+.settings-page {
+  max-width: 1200px;
+}
+
+/* ===== Profile Tab ===== */
+.settings-profile {
+  max-width: 1200px;
+}
+
+.settings-integration-item {
+  padding: var(--tf-space-4);
+  background: var(--tf-bg-surface-secondary);
+  border-radius: var(--tf-radius-lg);
+  transition: all var(--tf-transition-fast);
+}
+
+.settings-integration-item:hover {
+  background: var(--tf-bg-hover);
+}
+
+.settings-integration-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--tf-radius-lg);
+  flex-shrink: 0;
+}
+
+.settings-integration-icon.telegram {
+  background: linear-gradient(135deg, #0088cc 0%, #0066aa 100%);
+  color: white;
+}
+
+.settings-integration-icon.slack {
+  background: linear-gradient(135deg, #4A154B 0%, #6B2B6C 100%);
+  color: white;
+}
+
+.settings-integration-icon.google {
+  background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc05 75%, #ea4335 100%);
+  color: white;
+}
+
+/* ===== Project Tab ===== */
+.settings-project {
+  max-width: 800px;
+}
+
+/* ===== Members Tab ===== */
+.settings-members {
+  max-width: 1200px;
+}
+
+.settings-members .tf-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.settings-members .tf-table thead {
+  background: var(--tf-bg-surface-tertiary);
+}
+
+.settings-members .tf-table th {
+  padding: var(--tf-space-3) var(--tf-space-4);
+  font-size: var(--tf-font-size-xs);
+  font-weight: var(--tf-font-weight-semibold);
+  color: var(--tf-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--tf-letter-spacing-wider);
+  text-align: left;
+  border-bottom: 1px solid var(--tf-border-primary);
+}
+
+.settings-members .tf-table td {
+  padding: var(--tf-space-4);
+  border-bottom: 1px solid var(--tf-border-secondary);
+  vertical-align: middle;
+}
+
+.settings-members .tf-table tbody tr {
+  transition: background var(--tf-transition-fast);
+}
+
+.settings-members .tf-table tbody tr:hover {
+  background: var(--tf-bg-surface-secondary);
+}
+
+/* ===== Roles Tab ===== */
+.settings-roles {
+  max-width: 1200px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .settings-integration-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--tf-space-3);
+  }
+
+  .settings-members .tf-table {
+    font-size: var(--tf-font-size-sm);
+  }
+
+  .settings-members .tf-table th,
+  .settings-members .tf-table td {
+    padding: var(--tf-space-2);
+  }
+}
+
+/* ===== Animations ===== */
+@keyframes settings-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settings-profile,
+.settings-project,
+.settings-members,
+.settings-roles {
+  animation: settings-fade-in 0.3s ease-out;
+}

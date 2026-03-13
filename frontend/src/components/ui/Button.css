@@ -1,4 +1,5 @@
 .tf-button {
+  /* ===== Base Styles - shadcn/ui inspired ===== */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -13,21 +14,28 @@
   user-select: none;
   border: 1px solid transparent;
   border-radius: var(--tf-radius-lg);
-  transition: all var(--tf-transition-fast);
+  transition: all var(--tf-transition-fast) cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
+  
+  /* Smooth transform */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
+/* ===== Focus Visible - Accessibility ===== */
 .tf-button:focus-visible {
   outline: 2px solid var(--tf-primary-400);
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
 }
 
+/* ===== Disabled State ===== */
 .tf-button--disabled {
-  opacity: var(--tf-opacity-disabled);
-  cursor: var(--cursor-not-allowed, not-allowed);
+  opacity: 0.5;
+  cursor: not-allowed;
   pointer-events: none;
 }
 
@@ -67,41 +75,52 @@
   border-radius: var(--tf-radius-xl);
 }
 
-/* ===== Primary - Premium Gradient ===== */
+/* ===== Primary - Smooth Gradient Transition ===== */
 .tf-button--primary {
-  background: var(--tf-gradient-primary);
+  background: linear-gradient(135deg, var(--tf-primary-600) 0%, var(--tf-primary-700) 100%);
   color: white;
-  box-shadow: var(--tf-shadow-md), 0 0 0 1px rgba(124, 58, 237, 0.1);
+  box-shadow: 
+    0 1px 2px 0 rgba(124, 58, 237, 0.05),
+    0 0 0 1px rgba(124, 58, 237, 0.1);
 }
 
 .tf-button--primary:hover:not(.tf-button--disabled) {
-  background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
-  box-shadow: var(--tf-shadow-lg), 0 0 0 1px rgba(124, 58, 237, 0.2), var(--tf-shadow-glow-sm);
+  background: linear-gradient(135deg, var(--tf-primary-700) 0%, var(--tf-primary-800) 100%);
+  box-shadow: 
+    0 4px 12px 0 rgba(124, 58, 237, 0.2),
+    0 0 0 1px rgba(124, 58, 237, 0.15);
   transform: translateY(-1px);
 }
 
 .tf-button--primary:active:not(.tf-button--disabled) {
-  background: linear-gradient(135deg, #5b21b6 0%, #4c1d95 100%);
-  box-shadow: var(--tf-shadow-sm);
+  background: linear-gradient(135deg, var(--tf-primary-800) 0%, var(--tf-primary-900) 100%);
+  box-shadow: 
+    0 1px 2px 0 rgba(124, 58, 237, 0.1);
   transform: translateY(0);
 }
 
-/* ===== Secondary ===== */
+/* ===== Secondary - Clean & Minimal ===== */
 .tf-button--secondary {
   background: var(--tf-bg-surface);
   color: var(--tf-text-primary);
   border-color: var(--tf-border-primary);
-  box-shadow: var(--tf-shadow-xs);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .tf-button--secondary:hover:not(.tf-button--disabled) {
   background: var(--tf-bg-hover);
   border-color: var(--tf-border-strong);
-  box-shadow: var(--tf-shadow-sm);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
   transform: translateY(-1px);
 }
 
-/* ===== Outline ===== */
+.tf-button--secondary:active:not(.tf-button--disabled) {
+  background: var(--tf-bg-surface-tertiary);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transform: translateY(0);
+}
+
+/* ===== Outline - Minimal Border ===== */
 .tf-button--outline {
   background: transparent;
   border-color: var(--tf-border-primary);
@@ -112,9 +131,15 @@
   background: var(--tf-bg-hover);
   border-color: var(--tf-border-strong);
   color: var(--tf-text-primary);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-/* ===== Ghost ===== */
+.tf-button--outline:active:not(.tf-button--disabled) {
+  background: var(--tf-bg-surface-tertiary);
+  transform: translateY(0);
+}
+
+/* ===== Ghost - Subtle Hover ===== */
 .tf-button--ghost {
   background: transparent;
   color: var(--tf-text-secondary);
@@ -125,42 +150,46 @@
   color: var(--tf-text-primary);
 }
 
+.tf-button--ghost:active:not(.tf-button--disabled) {
+  background: var(--tf-bg-surface-tertiary);
+}
+
 /* ===== Success ===== */
 .tf-button--success {
-  background: var(--tf-gradient-success);
+  background: linear-gradient(135deg, var(--tf-success-600) 0%, var(--tf-success-700) 100%);
   color: white;
-  box-shadow: var(--tf-shadow-md);
+  box-shadow: 0 1px 2px 0 rgba(16, 185, 129, 0.1);
 }
 
 .tf-button--success:hover:not(.tf-button--disabled) {
-  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
-  box-shadow: var(--tf-shadow-lg);
+  background: linear-gradient(135deg, var(--tf-success-700) 0%, var(--tf-success-800) 100%);
+  box-shadow: 0 4px 12px 0 rgba(16, 185, 129, 0.2);
   transform: translateY(-1px);
 }
 
 /* ===== Danger ===== */
 .tf-button--danger {
-  background: var(--tf-gradient-danger);
+  background: linear-gradient(135deg, var(--tf-danger-600) 0%, var(--tf-danger-700) 100%);
   color: white;
-  box-shadow: var(--tf-shadow-md);
+  box-shadow: 0 1px 2px 0 rgba(244, 63, 94, 0.1);
 }
 
 .tf-button--danger:hover:not(.tf-button--disabled) {
-  background: linear-gradient(135deg, #be123c 0%, #9f1239 100%);
-  box-shadow: var(--tf-shadow-lg);
+  background: linear-gradient(135deg, var(--tf-danger-700) 0%, var(--tf-danger-800) 100%);
+  box-shadow: 0 4px 12px 0 rgba(244, 63, 94, 0.2);
   transform: translateY(-1px);
 }
 
 /* ===== Warning ===== */
 .tf-button--warning {
-  background: var(--tf-gradient-warm);
+  background: linear-gradient(135deg, var(--tf-warning-600) 0%, var(--tf-warning-700) 100%);
   color: white;
-  box-shadow: var(--tf-shadow-md);
+  box-shadow: 0 1px 2px 0 rgba(245, 158, 11, 0.1);
 }
 
 .tf-button--warning:hover:not(.tf-button--disabled) {
-  background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
-  box-shadow: var(--tf-shadow-lg);
+  background: linear-gradient(135deg, var(--tf-warning-700) 0%, var(--tf-warning-800) 100%);
+  box-shadow: 0 4px 12px 0 rgba(245, 158, 11, 0.2);
   transform: translateY(-1px);
 }
 
@@ -169,7 +198,7 @@
   width: 100%;
 }
 
-/* ===== Loader ===== */
+/* ===== Loader Animation ===== */
 .tf-button__loader {
   position: absolute;
   width: 16px;
@@ -194,12 +223,17 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: transform var(--tf-transition-fast);
 }
 
 .tf-button__icon svg,
 .tf-button__icon i {
   width: 16px;
   height: 16px;
+}
+
+.tf-button:hover:not(.tf-button--disabled) .tf-button__icon {
+  transform: scale(1.1);
 }
 
 .tf-button--xs .tf-button__icon svg,
@@ -235,21 +269,36 @@
   z-index: 1;
 }
 
-/* ===== Ripple Effect (Optional Enhancement) ===== */
-.tf-button::after {
-  content: '';
+/* ===== Ripple Effect ===== */
+.tf-button__ripple {
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
   transform: scale(0);
-  opacity: 0;
-  transition: transform 0.5s, opacity 0.3s;
+  animation: tf-ripple 0.6s linear;
   pointer-events: none;
 }
 
-.tf-button:active::after {
-  transform: scale(2);
-  opacity: 0;
-  transition: 0s;
+@keyframes tf-ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ===== Button Group Support ===== */
+.tf-button-group .tf-button {
+  border-radius: 0;
+}
+
+.tf-button-group .tf-button:first-child {
+  border-radius: var(--tf-radius-lg) 0 0 var(--tf-radius-lg);
+}
+
+.tf-button-group .tf-button:last-child {
+  border-radius: 0 var(--tf-radius-lg) var(--tf-radius-lg) 0;
+}
+
+.tf-button-group .tf-button:not(:last-child) {
+  margin-right: -1px;
 }

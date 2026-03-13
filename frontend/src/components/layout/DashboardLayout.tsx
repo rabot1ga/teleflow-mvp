@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../../stores/authStore'
 import toast from 'react-hot-toast'
-// import { NotificationCenter } from '../common/NotificationCenter'
 import './DashboardLayout.css'
 
 interface NavItem {
@@ -70,14 +69,50 @@ export function DashboardLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, logout } = useAuthStore()
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
-  const handleLogout = () => {
+  // Handle window resize for responsive sidebar
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 1024
+      setIsMobile(mobile)
+      if (mobile) {
+        setSidebarOpen(false)
+      }
+    }
+
+    // Initial check
+    handleResize()
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Handle logout
+  const handleLogout = useCallback(() => {
     logout()
     toast.success('Logged out successfully')
     navigate('/login')
-  }
+  }, [logout, navigate])
+
+  // Toggle sidebar
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen(prev => !prev)
+  }, [])
+
+  // Close sidebar on mobile when clicking a link
+  const handleNavClick = useCallback(() => {
+    if (isMobile) {
+      setSidebarOpen(false)
+    }
+  }, [isMobile])
+
+  // Close sidebar when clicking overlay
+  const handleOverlayClick = useCallback(() => {
+    setSidebarOpen(false)
+  }, [])
 
   const navItems: NavItem[] = [
     { path: '/dashboard', label: 'Dashboard', icon: NavIcons.dashboard, category: 'main' },
@@ -90,7 +125,7 @@ export function DashboardLayout() {
     { path: '/settings', label: 'Settings', icon: NavIcons.settings, category: 'settings' },
   ]
 
-  const isActive = (path: string) => location.pathname.startsWith(path)
+  const isActive = useCallback((path: string) => location.pathname.startsWith(path), [location.pathname])
 
   const groupedNavItems = navItems.reduce((acc, item) => {
     if (!acc[item.category]) {
@@ -102,11 +137,16 @@ export function DashboardLayout() {
 
   return (
     <div className="dashboard-layout">
+      {/* Mobile Overlay - shows when sidebar is open on mobile */}
+      {isMobile && sidebarOpen && (
+        <div className="sidebar-overlay" onClick={handleOverlayClick} />
+      )}
+      
       {/* Sidebar */}
       <aside className={`sidebar ${sidebarOpen ? 'sidebar--open' : 'sidebar--collapsed'}`}>
         {/* Logo */}
         <div className="sidebar__header">
-          <Link to="/dashboard" className="sidebar__logo">
+          <Link to="/dashboard" className="sidebar__logo" onClick={handleNavClick}>
             <div className="sidebar__logo-icon">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
@@ -116,8 +156,9 @@ export function DashboardLayout() {
           </Link>
           <button
             className="sidebar__toggle"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={toggleSidebar}
             aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+            type="button"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="15,18 9,12 15,6" />
@@ -137,6 +178,7 @@ export function DashboardLayout() {
                   key={item.path}
                   to={item.path}
                   className={`sidebar__link ${isActive(item.path) ? 'sidebar__link--active' : ''}`}
+                  onClick={handleNavClick}
                   title={!sidebarOpen ? item.label : undefined}
                 >
                   <span className="sidebar__link-icon">{item.icon}</span>
@@ -172,8 +214,9 @@ export function DashboardLayout() {
           <div className="main-header__left">
             <button
               className="main-header__toggle"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
+              onClick={toggleSidebar}
               aria-label="Toggle menu"
+              type="button"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="3" y1="12" x2="21" y2="12" />
@@ -187,15 +230,13 @@ export function DashboardLayout() {
           </div>
 
           <div className="main-header__right">
-            {/* Notifications - temporarily disabled */}
-            {/* <NotificationCenter /> */}
-
             {/* User Menu */}
             <div className="user-menu">
               <button
                 className="user-menu__trigger"
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 aria-label="User menu"
+                type="button"
               >
                 <div className="user-menu__avatar">
                   {user?.first_name?.charAt(0) || user?.email?.charAt(0) || 'U'}

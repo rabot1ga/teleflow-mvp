@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { cn } from '@/utils'
 import './Button.css'
 
@@ -27,10 +27,36 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       fullWidth = false,
       disabled,
       children,
+      onClick,
       ...props
     },
     ref
   ) => {
+    const [ripples, setRipples] = useState<{ x: number; y: number; id: number }[]>([])
+
+    const createRipple = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+      if (isLoading || disabled) return
+
+      const button = event.currentTarget
+      const rect = button.getBoundingClientRect()
+      const size = Math.max(rect.width, rect.height)
+      const x = event.clientX - rect.left - size / 2
+      const y = event.clientY - rect.top - size / 2
+      const id = Date.now()
+
+      setRipples((prev) => [...prev, { x, y, id }])
+
+      // Cleanup ripple after animation
+      setTimeout(() => {
+        setRipples((prev) => prev.filter((ripple) => ripple.id !== id))
+      }, 600)
+    }, [isLoading, disabled])
+
+    const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+      createRipple(event)
+      onClick?.(event)
+    }, [createRipple, onClick])
+
     const classes = cn(
       'tf-button',
       `tf-button--${variant}`,
@@ -44,7 +70,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     )
 
     return (
-      <button ref={ref} className={classes} disabled={disabled || isLoading} {...props}>
+      <button
+        ref={ref}
+        className={classes}
+        disabled={disabled || isLoading}
+        onClick={handleClick}
+        {...props}
+      >
         {isLoading && (
           <span className="tf-button__loader">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,6 +93,20 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {leftIcon && <span className="tf-button__icon tf-button__icon--left">{leftIcon}</span>}
         <span className="tf-button__content">{children}</span>
         {rightIcon && <span className="tf-button__icon tf-button__icon--right">{rightIcon}</span>}
+        
+        {/* Ripple effects */}
+        {ripples.map((ripple) => (
+          <span
+            key={ripple.id}
+            className="tf-button__ripple"
+            style={{
+              left: ripple.x,
+              top: ripple.y,
+              width: '20px',
+              height: '20px',
+            }}
+          />
+        ))}
       </button>
     )
   }

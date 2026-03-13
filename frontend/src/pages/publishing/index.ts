@@ -1,1 +1,1 @@
-export { PublishingPage, SettingsPage } from './PublishingPage'
+export { PublishingPage } from './PublishingPage'

@@ -4,6 +4,7 @@ import { contentApi, type Source, type Article } from '@/services/contentApi'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
+import './ContentPage.css'
 
 const sourceSchema = z.object({
   project_id: z.string().uuid(),
@@ -194,8 +195,8 @@ export function ContentPage() {
   
   // Get project_id from localStorage or use user ID as fallback
   const authStorage = localStorage.getItem('auth-storage')
-  let projectId = '550e8400-e29b-41d4-a716-446655440000'
-  
+  let projectId = '9ca1f5a6-6b41-4090-b366-9ac87200c6ec' // Default test project ID
+
   if (authStorage) {
     const user = JSON.parse(authStorage).state?.user
     // Try to get project from user.projects array
@@ -228,13 +229,17 @@ export function ContentPage() {
       return []
     },
     staleTime: 0, // Always refetch
+    enabled: !!projectId, // Only run if projectId is defined
   })
 
   const createMutation = useMutation({
     mutationFn: async (data: SourceForm) => {
+      console.log('📝 Creating source with data:', data)
+      console.log('🔑 Using project_id:', projectId)
+      
       const validated = sourceSchema.parse(data)
       const response = await contentApi.createSource(validated)
-      // Axios already parses JSON, response.data is the parsed object
+      console.log('✅ API response:', response.data)
       return response.data
     },
     onSuccess: async (data) => {
@@ -248,7 +253,28 @@ export function ContentPage() {
     onError: (error: any) => {
       console.error('❌ Create error:', error)
       console.error('❌ Error response:', error.response?.data)
-      toast.error(error.response?.data?.error?.message || 'Failed to create source')
+      console.error('❌ Error status:', error.response?.status)
+      console.error('❌ Error headers:', error.response?.headers)
+      
+      let errorMessage = 'Failed to create source'
+      
+      // Try to get error message from different response formats
+      const errorData = error.response?.data
+      if (errorData) {
+        if (typeof errorData === 'string') {
+          errorMessage = errorData
+        } else if (errorData.error?.message) {
+          errorMessage = errorData.error.message
+        } else if (errorData.detail) {
+          errorMessage = Array.isArray(errorData.detail) 
+            ? errorData.detail.map((d: any) => d.msg || d.message).join('; ')
+            : errorData.detail
+        } else if (errorData.message) {
+          errorMessage = errorData.message
+        }
+      }
+      
+      toast.error(errorMessage)
     },
   })
 
@@ -368,39 +394,41 @@ export function ContentPage() {
   ]
 
   return (
-    <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="h2 mb-0">Content</h1>
-        <Button onClick={() => setShowAddModal(true)}>+ Add Source</Button>
+    <div className="content-page">
+      {/* Header */}
+      <div className="content-page__header">
+        <h1 className="content-page__title">Content</h1>
+        <Button onClick={() => setShowAddModal(true)} size="sm">
+          + Add Source
+        </Button>
       </div>
 
       {/* Tabs */}
-      <ul className="nav nav-tabs mb-4">
-        <li className="nav-item">
+      <div className="tf-tabs">
+        <div className="tf-tabs__list">
           <button
-            className={`nav-link ${activeTab === 'sources' ? 'active' : ''}`}
+            className={`tf-tabs__tab ${activeTab === 'sources' ? 'tf-tabs__tab--active' : ''}`}
             onClick={() => setActiveTab('sources')}
+            type="button"
           >
             Sources
           </button>
-        </li>
-        <li className="nav-item">
           <button
-            className={`nav-link ${activeTab === 'articles' ? 'active' : ''}`}
+            className={`tf-tabs__tab ${activeTab === 'articles' ? 'tf-tabs__tab--active' : ''}`}
             onClick={() => setActiveTab('articles')}
+            type="button"
           >
             Articles
           </button>
-        </li>
-        <li className="nav-item">
           <button
-            className={`nav-link ${activeTab === 'moderation' ? 'active' : ''}`}
+            className={`tf-tabs__tab ${activeTab === 'moderation' ? 'tf-tabs__tab--active' : ''}`}
             onClick={() => setActiveTab('moderation')}
+            type="button"
           >
             Moderation
           </button>
-        </li>
-      </ul>
+        </div>
+      </div>
 
       {/* Content */}
       {activeTab === 'sources' && (

@@ -1,6 +1,9 @@
 /* TeleFlow Platform - Global Styles */
-@import './styles/design-tokens.css';
-@import './styles/main.css';
+@import './styles/tokens.css';
+@import './styles/reset.css';
+@import './styles/globals.css';
+@import './styles/responsive.css';
+@import './styles/utilities.css';
 
 /* App specific styles */
 #root {

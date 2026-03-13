@@ -1,0 +1,267 @@
+/**
+ * TeleFlow Responsive Utilities
+ * Mobile-first responsive classes and media queries
+ */
+
+/* ===== Responsive Grid System ===== */
+.tf-grid {
+  display: grid;
+  gap: var(--tf-space-6);
+}
+
+.tf-grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.tf-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.tf-grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tf-grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* ===== Responsive Flex ===== */
+.tf-flex {
+  display: flex;
+}
+
+.tf-flex-col { flex-direction: column; }
+.tf-flex-row { flex-direction: row; }
+.tf-flex-wrap { flex-wrap: wrap; }
+.tf-flex-nowrap { flex-wrap: nowrap; }
+.tf-flex-1 { flex: 1 1 0; }
+.tf-flex-auto { flex: 1 1 auto; }
+
+/* ===== Spacing Utilities ===== */
+.tf-gap-2 { gap: var(--tf-space-2); }
+.tf-gap-4 { gap: var(--tf-space-4); }
+.tf-gap-6 { gap: var(--tf-space-6); }
+.tf-gap-8 { gap: var(--tf-space-8); }
+
+/* ===== Container ===== */
+.tf-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--tf-space-4);
+  padding-right: var(--tf-space-4);
+}
+
+/* ===== Responsive Padding ===== */
+.tf-p-4 { padding: var(--tf-space-4); }
+.tf-p-6 { padding: var(--tf-space-6); }
+
+/* ===== Text Responsive ===== */
+.tf-text-sm { font-size: var(--tf-font-size-sm); }
+.tf-text-base { font-size: var(--tf-font-size-base); }
+.tf-text-lg { font-size: var(--tf-font-size-lg); }
+.tf-text-xl { font-size: var(--tf-font-size-xl); }
+
+/* ===== Touch-friendly Targets ===== */
+.tf-touch-target {
+  min-height: var(--tf-touch-target);
+  min-width: var(--tf-touch-target);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--tf-space-2);
+}
+
+.tf-touch-target-lg {
+  min-height: var(--tf-touch-target-lg);
+  min-width: var(--tf-touch-target-lg);
+  padding: var(--tf-space-3);
+}
+
+/* ===== Hide/Show on Breakpoints ===== */
+.tf-hidden { display: none !important; }
+.tf-block { display: block !important; }
+.tf-flex { display: flex !important; }
+.tf-grid { display: grid !important; }
+
+/* ===== Mobile (default) ===== */
+/* All styles are mobile-first by default */
+
+/* ===== Tablet and up (≥768px) ===== */
+@media (min-width: 768px) {
+  .tf-hidden-md { display: none !important; }
+  .tf-block-md { display: block !important; }
+  .tf-flex-md { display: flex !important; }
+  .tf-grid-md { display: grid !important; }
+  
+  .tf-grid-cols-1-md { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .tf-grid-cols-2-md { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tf-grid-cols-3-md { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tf-grid-cols-4-md { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  
+  .tf-flex-col-md { flex-direction: column; }
+  .tf-flex-row-md { flex-direction: row; }
+  
+  .tf-text-sm-md { font-size: var(--tf-font-size-sm); }
+  .tf-text-base-md { font-size: var(--tf-font-size-base); }
+  .tf-text-lg-md { font-size: var(--tf-font-size-lg); }
+  
+  .tf-container {
+    max-width: 720px;
+  }
+}
+
+/* ===== Laptop and up (≥1024px) ===== */
+@media (min-width: 1024px) {
+  .tf-hidden-lg { display: none !important; }
+  .tf-block-lg { display: block !important; }
+  .tf-flex-lg { display: flex !important; }
+  .tf-grid-lg { display: grid !important; }
+  
+  .tf-grid-cols-1-lg { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .tf-grid-cols-2-lg { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tf-grid-cols-3-lg { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tf-grid-cols-4-lg { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  
+  .tf-flex-col-lg { flex-direction: column; }
+  .tf-flex-row-lg { flex-direction: row; }
+  
+  .tf-container {
+    max-width: 960px;
+    padding-left: var(--tf-space-8);
+    padding-right: var(--tf-space-8);
+  }
+}
+
+/* ===== Desktop and up (≥1280px) ===== */
+@media (min-width: 1280px) {
+  .tf-hidden-xl { display: none !important; }
+  .tf-block-xl { display: block !important; }
+  .tf-flex-xl { display: flex !important; }
+  .tf-grid-xl { display: grid !important; }
+  
+  .tf-grid-cols-1-xl { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .tf-grid-cols-2-xl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tf-grid-cols-3-xl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tf-grid-cols-4-xl { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  
+  .tf-container {
+    max-width: 1200px;
+  }
+}
+
+/* ===== Large Desktop (≥1536px) ===== */
+@media (min-width: 1536px) {
+  .tf-container {
+    max-width: 1440px;
+  }
+}
+
+/* ===== Mobile-specific Adjustments ===== */
+@media (max-width: 767px) {
+  /* Increase touch targets on mobile */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    min-height: var(--tf-touch-target);
+  }
+  
+  /* Larger text on mobile for readability */
+  body {
+    font-size: var(--tf-font-size-base);
+  }
+  
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Full-width cards on mobile */
+  .tf-card-mobile-full {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  /* Stack layouts vertically */
+  .tf-stack-mobile {
+    flex-direction: column !important;
+  }
+  
+  .tf-stack-mobile > * {
+    width: 100%;
+  }
+}
+
+/* ===== Tablet-specific Adjustments ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tf-card-tablet-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--tf-space-4);
+  }
+}
+
+/* ===== Landscape Mobile ===== */
+@media (max-height: 500px) and (orientation: landscape) {
+  .tf-hide-in-landscape {
+    display: none !important;
+  }
+  
+  .tf-compact-in-landscape {
+    padding: var(--tf-space-2) !important;
+  }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+  .tf-no-print {
+    display: none !important;
+  }
+  
+  .tf-print-break-before {
+    page-break-before: always;
+  }
+  
+  .tf-print-break-after {
+    page-break-after: always;
+  }
+  
+  .tf-print-break-inside {
+    page-break-inside: avoid;
+  }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== High Contrast Mode ===== */
+@media (prefers-contrast: high) {
+  :root {
+    --tf-border-primary: #000000;
+    --tf-text-primary: #000000;
+    --tf-text-secondary: #333333;
+  }
+}
+
+/* ===== Dark Mode Support ===== */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode variables will be applied here */
+  /* Already defined in tokens.css */
+}
+
+/* ===== Safe Area Insets (iPhone X+) ===== */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+  
+  .tf-safe-top {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+  
+  .tf-safe-bottom {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+}

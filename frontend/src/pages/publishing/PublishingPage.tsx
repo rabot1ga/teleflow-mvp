@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Card, Button, Table, Modal, FormField, Input, Textarea, PageHeader, Tabs } from '@/components/ui'
+import { Card, Button, Table, Modal, FormField, Input, Textarea, PageHeader, Tabs, Badge } from '@/components/ui'
 import { publishingApi, type Target, type Template } from '@/services/publishingApi'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
+import './PublishingPage.css'
 
 function TargetsTab() {
   const queryClient = useQueryClient()
@@ -216,19 +217,140 @@ function TemplatesTab() {
 }
 
 function CalendarTab() {
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+
+  const getDaysInMonth = (date: Date) => {
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const firstDay = new Date(year, month, 1)
+    const lastDay = new Date(year, month + 1, 0)
+    const daysInMonth = lastDay.getDate()
+    const startingDay = firstDay.getDay()
+    
+    return { daysInMonth, startingDay, year, month }
+  }
+
+  const { daysInMonth, startingDay, year, month } = getDaysInMonth(currentDate)
+  
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ]
+
+  const prevMonth = () => {
+    setCurrentDate(new Date(year, month - 1, 1))
+  }
+
+  const nextMonth = () => {
+    setCurrentDate(new Date(year, month + 1, 1))
+  }
+
+  const today = new Date()
+  const isToday = (day: number) => {
+    return day === today.getDate() && month === today.getMonth() && year === today.getFullYear()
+  }
+
+  const isSelected = (day: number) => {
+    if (!selectedDate) return false
+    return day === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()
+  }
+
+  // Mock publications for demo
+  const publications = [
+    { day: 5, title: 'Article: Tech News', time: '10:00' },
+    { day: 12, title: 'Broadcast: Weekly Digest', time: '14:00' },
+    { day: 20, title: 'Article: AI Update', time: '09:00' },
+  ]
+
+  const hasPublication = (day: number) => publications.find(p => p.day === day)
+
   return (
-    <Card title="Publish Calendar">
-      <div className="text-center text-muted py-8">
-        <svg className="mx-auto mb-4" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="3" y="4" width="18" height="18" rx="2" />
-          <line x1="16" y1="2" x2="16" y2="6" />
-          <line x1="8" y1="2" x2="8" y2="6" />
-          <line x1="3" y1="10" x2="21" y2="10" />
-        </svg>
-        <p className="text-lg font-medium">Calendar view coming soon</p>
-        <p className="text-sm">Schedule and manage your publications visually</p>
-      </div>
-    </Card>
+    <div className="publishing-calendar">
+      <Card>
+        {/* Calendar Header */}
+        <div className="calendar-header mb-4">
+          <button className="calendar-nav-btn" onClick={prevMonth}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="15,18 9,12 15,6" />
+            </svg>
+          </button>
+          <h3 className="calendar-title">
+            {monthNames[month]} {year}
+          </h3>
+          <button className="calendar-nav-btn" onClick={nextMonth}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="9,18 15,12 9,6" />
+            </svg>
+          </button>
+          <Button variant="outline" size="sm" className="ms-auto" onClick={() => setCurrentDate(new Date())}>
+            Today
+          </Button>
+        </div>
+
+        {/* Calendar Grid */}
+        <div className="calendar-grid">
+          {/* Weekday Headers */}
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+            <div key={day} className="calendar-weekday-header">{day}</div>
+          ))}
+
+          {/* Empty cells for days before month starts */}
+          {Array.from({ length: startingDay }).map((_, i) => (
+            <div key={`empty-${i}`} className="calendar-day calendar-day--empty" />
+          ))}
+
+          {/* Days of the month */}
+          {Array.from({ length: daysInMonth }).map((_, i) => {
+            const day = i + 1
+            const pub = hasPublication(day)
+            return (
+              <div
+                key={day}
+                className={`calendar-day ${isToday(day) ? 'calendar-day--today' : ''} ${isSelected(day) ? 'calendar-day--selected' : ''}`}
+                onClick={() => setSelectedDate(new Date(year, month, day))}
+              >
+                <div className="calendar-day-number">{day}</div>
+                {pub && (
+                  <div className="calendar-day-publication">
+                    <div className="calendar-day-publication-dot" />
+                    <span className="calendar-day-publication-title">{pub.title}</span>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+      </Card>
+
+      {/* Selected Day Details */}
+      {selectedDate && (
+        <Card title={`Publications on ${selectedDate.toLocaleDateString()}`} className="mt-4">
+          <div className="text-center text-muted py-4">
+            <p>No publications scheduled for this day</p>
+            <Button variant="primary" size="sm" className="mt-2" onClick={() => toast.success('Create publication')}>
+              + Schedule Publication
+            </Button>
+          </div>
+        </Card>
+      )}
+
+      {/* Upcoming Publications */}
+      <Card title="Upcoming Publications" className="mt-4">
+        <div className="d-flex flex-col gap-3">
+          {publications.map((pub, index) => (
+            <div key={index} className="calendar-upcoming-item">
+              <div className="calendar-upcoming-day">{monthNames[month]} {pub.day}</div>
+              <div className="calendar-upcoming-info">
+                <div className="calendar-upcoming-title">{pub.title}</div>
+                <div className="calendar-upcoming-time">{pub.time}</div>
+              </div>
+              <Badge variant="primary">Scheduled</Badge>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
   )
 }
 
@@ -253,55 +375,6 @@ export function PublishingPage() {
         {activeTab === 'templates' && <TemplatesTab />}
         {activeTab === 'calendar' && <CalendarTab />}
       </Tabs>
-    </div>
-  )
-}
-
-export function SettingsPage() {
-
-  const handleSaveProfile = () => {
-    toast.success('Profile settings saved')
-  }
-
-  return (
-    <div>
-      <PageHeader
-        title="Settings"
-        description="Manage your account and project settings"
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card title="Profile Settings">
-          <form onSubmit={(e) => { e.preventDefault(); handleSaveProfile() }}>
-            <div className="d-flex flex-col gap-4">
-              <FormField label="Email">
-                <Input type="email" defaultValue="test@example.com" />
-              </FormField>
-              <FormField label="First Name">
-                <Input type="text" defaultValue="Test" />
-              </FormField>
-              <FormField label="Last Name">
-                <Input type="text" defaultValue="User" />
-              </FormField>
-              <Button type="submit" variant="primary">
-                Save Changes
-              </Button>
-            </div>
-          </form>
-        </Card>
-
-        <Card title="Project Settings">
-          <div className="text-center text-muted py-8">
-            <svg className="mx-auto mb-4" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <line x1="3" y1="9" x2="21" y2="9" />
-              <line x1="9" y1="21" x2="9" y2="9" />
-            </svg>
-            <p className="text-lg font-medium">Project configuration</p>
-            <p className="text-sm">Members, API keys, notifications</p>
-          </div>
-        </Card>
-      </div>
     </div>
   )
 }

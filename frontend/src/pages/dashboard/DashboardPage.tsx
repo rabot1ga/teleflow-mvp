@@ -29,39 +29,42 @@ export function DashboardPage() {
 
   return (
     <div className="dashboard-page">
-      {/* Header */}
-      <div className="dashboard-page__header">
-        <div className="dashboard-page__welcome">
-          <h1 className="dashboard-page__title">
-            Welcome back, {user?.first_name || 'User'}! 👋
-          </h1>
-          <p className="dashboard-page__subtitle">
-            Here's what's happening with your Telegram operations today.
-          </p>
-        </div>
-        <div className="dashboard-page__actions">
-          <div className="dashboard-page__time-range">
-            <button
-              className={`dashboard-page__time-btn ${timeRange === '7d' ? 'active' : ''}`}
-              onClick={() => setTimeRange('7d')}
-            >
-              7D
-            </button>
-            <button
-              className={`dashboard-page__time-btn ${timeRange === '30d' ? 'active' : ''}`}
-              onClick={() => setTimeRange('30d')}
-            >
-              30D
-            </button>
-            <button
-              className={`dashboard-page__time-btn ${timeRange === '90d' ? 'active' : ''}`}
-              onClick={() => setTimeRange('90d')}
-            >
-              90D
-            </button>
-          </div>
-          <Button variant="primary" leftIcon="📥">
-            Refresh Data
+      {/* Dashboard Content - Header is in DashboardLayout */}
+      
+      {/* Welcome Section */}
+      <div className="dashboard-page__welcome">
+        <h1 className="dashboard-page__title">
+          Welcome back, {user?.first_name || 'User'}! 👋
+        </h1>
+        <p className="dashboard-page__subtitle">
+          Here's what's happening with your Telegram operations today.
+        </p>
+        
+        {/* Time Range Selector */}
+        <div className="dashboard-page__time-range">
+          <button
+            className={`dashboard-page__time-btn ${timeRange === '7d' ? 'active' : ''}`}
+            onClick={() => setTimeRange('7d')}
+            type="button"
+          >
+            7D
+          </button>
+          <button
+            className={`dashboard-page__time-btn ${timeRange === '30d' ? 'active' : ''}`}
+            onClick={() => setTimeRange('30d')}
+            type="button"
+          >
+            30D
+          </button>
+          <button
+            className={`dashboard-page__time-btn ${timeRange === '90d' ? 'active' : ''}`}
+            onClick={() => setTimeRange('90d')}
+            type="button"
+          >
+            90D
+          </button>
+          <Button variant="primary" leftIcon="📥" size="sm">
+            Refresh
           </Button>
         </div>
       </div>
@@ -113,6 +116,7 @@ export function DashboardPage() {
                   key={index}
                   className="dashboard-page__action-btn"
                   onClick={action.action}
+                  type="button"
                 >
                   <span className="dashboard-page__action-icon">{action.icon}</span>
                   <span className="dashboard-page__action-label">{action.label}</span>
