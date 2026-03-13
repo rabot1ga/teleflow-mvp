@@ -1,0 +1,187 @@
+.notification-center {
+  position: relative;
+}
+
+.notification-center__trigger {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tf-text-secondary);
+  border-radius: var(--tf-radius-md);
+  transition: all var(--tf-transition-fast);
+  cursor: pointer;
+}
+
+.notification-center__trigger:hover {
+  background: var(--tf-bg-hover);
+  color: var(--tf-text-primary);
+}
+
+.notification-center__trigger svg {
+  width: 20px;
+  height: 20px;
+}
+
+.notification-center__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 10px;
+}
+
+.notification-center__dropdown {
+  position: absolute;
+  top: calc(100% + var(--tf-space-2));
+  right: 0;
+  width: 400px;
+  max-height: 500px;
+  background: var(--tf-bg-surface);
+  border: 1px solid var(--tf-border-primary);
+  border-radius: var(--tf-radius-lg);
+  box-shadow: var(--tf-shadow-lg);
+  z-index: var(--tf-z-dropdown);
+  overflow: hidden;
+  animation: dropdown-fade-in 0.2s ease-out;
+}
+
+@keyframes dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notification-center__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--tf-space-4);
+  border-bottom: 1px solid var(--tf-border-secondary);
+}
+
+.notification-center__header h3 {
+  margin: 0;
+  font-size: var(--tf-font-size-base);
+  font-weight: var(--tf-font-weight-semibold);
+  color: var(--tf-text-primary);
+}
+
+.notification-center__actions {
+  display: flex;
+  gap: var(--tf-space-2);
+}
+
+.notification-center__action {
+  padding: var(--tf-space-1) var(--tf-space-2);
+  font-size: var(--tf-font-size-xs);
+  color: var(--tf-text-link);
+  background: transparent;
+  border: none;
+  border-radius: var(--tf-radius-sm);
+  cursor: pointer;
+  transition: all var(--tf-transition-fast);
+}
+
+.notification-center__action:hover {
+  background: var(--tf-bg-hover);
+  text-decoration: underline;
+}
+
+.notification-center__list {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.notification-center__item {
+  display: flex;
+  gap: var(--tf-space-3);
+  padding: var(--tf-space-3) var(--tf-space-4);
+  border-bottom: 1px solid var(--tf-border-secondary);
+  cursor: pointer;
+  transition: all var(--tf-transition-fast);
+}
+
+.notification-center__item:last-child {
+  border-bottom: none;
+}
+
+.notification-center__item:hover {
+  background: var(--tf-bg-hover);
+}
+
+.notification-center__item--unread {
+  background: var(--tf-primary-50);
+}
+
+.notification-center__item--unread:hover {
+  background: var(--tf-primary-100);
+}
+
+.notification-center__icon {
+  font-size: var(--tf-font-size-xl);
+  flex-shrink: 0;
+}
+
+.notification-center__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-center__title {
+  display: flex;
+  align-items: center;
+  gap: var(--tf-space-2);
+  margin-bottom: var(--tf-space-1);
+  font-size: var(--tf-font-size-sm);
+  font-weight: var(--tf-font-weight-medium);
+  color: var(--tf-text-primary);
+}
+
+.notification-center__message {
+  margin: 0 0 var(--tf-space-1) 0;
+  font-size: var(--tf-font-size-sm);
+  color: var(--tf-text-secondary);
+  line-height: var(--tf-line-height-relaxed);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notification-center__time {
+  font-size: var(--tf-font-size-xs);
+  color: var(--tf-text-tertiary);
+}
+
+.notification-center__empty {
+  padding: var(--tf-space-8) var(--tf-space-4);
+  text-align: center;
+  color: var(--tf-text-tertiary);
+}
+
+.notification-center__empty p {
+  margin: 0;
+  font-size: var(--tf-font-size-sm);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .notification-center__dropdown {
+    position: fixed;
+    top: var(--tf-header-height);
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: calc(100vh - var(--tf-header-height));
+    border-radius: 0;
+  }
+}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../../stores/authStore'
 import toast from 'react-hot-toast'
+import { NotificationCenter } from '../common/NotificationCenter'
 import './DashboardLayout.css'
 
 interface NavItem {
@@ -186,6 +187,9 @@ export function DashboardLayout() {
           </div>
 
           <div className="main-header__right">
+            {/* Notifications */}
+            <NotificationCenter />
+
             {/* User Menu */}
             <div className="user-menu">
               <button

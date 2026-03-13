@@ -21,27 +21,30 @@ test.describe('Content Module', () => {
   })
 
   test('should display content page with tabs', async ({ page }) => {
-    // Check page title
-    await expect(page.locator('h1')).toContainText('Content')
+    // Check page title in main header
+    await expect(page.locator('.main-header__title')).toContainText('Content')
 
-    // Check tabs are visible
-    await expect(page.locator('text=Sources')).toBeVisible()
-    await expect(page.locator('text=Articles')).toBeVisible()
-    await expect(page.locator('text=Moderation')).toBeVisible()
+    // Check tabs are visible (buttons with role)
+    await expect(page.getByRole('button', { name: 'Sources' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Articles' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Moderation' })).toBeVisible()
   })
 
   test('should switch between tabs', async ({ page }) => {
     // Click on Articles tab
-    await page.click('text=Articles')
-    await expect(page.locator('.tf-tabs-item--active')).toContainText('Articles')
+    await page.getByRole('button', { name: 'Articles' }).click()
+    await page.waitForTimeout(500)
+    await expect(page.getByRole('button', { name: 'Articles' })).toHaveClass(/active/)
 
     // Click on Moderation tab
-    await page.click('text=Moderation')
-    await expect(page.locator('.tf-tabs-item--active')).toContainText('Moderation')
+    await page.getByRole('button', { name: 'Moderation' }).click()
+    await page.waitForTimeout(500)
+    await expect(page.getByRole('button', { name: 'Moderation' })).toHaveClass(/active/)
 
     // Click back on Sources tab
-    await page.click('text=Sources')
-    await expect(page.locator('.tf-tabs-item--active')).toContainText('Sources')
+    await page.getByRole('button', { name: 'Sources' }).click()
+    await page.waitForTimeout(500)
+    await expect(page.getByRole('button', { name: 'Sources' })).toHaveClass(/active/)
   })
 
   test('should open add source modal', async ({ page }) => {
