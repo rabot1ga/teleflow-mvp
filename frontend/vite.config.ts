@@ -15,39 +15,39 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api/v1/auth': {
-        target: 'http://host.docker.internal:8001',
+        target: 'http://teleflow-auth-service:8001',
         changeOrigin: true,
       },
       '/api/v1/content': {
-        target: 'http://host.docker.internal:8002',
+        target: 'http://teleflow-content-service:8002',
         changeOrigin: true,
       },
       '/api/v1/publishing': {
-        target: 'http://host.docker.internal:8004',
+        target: 'http://teleflow-publishing-service:8004',
         changeOrigin: true,
       },
       '/api/v1/funnels': {
-        target: 'http://host.docker.internal:8005',
+        target: 'http://teleflow-funnel-service:8005',
         changeOrigin: true,
       },
       '/api/v1/bot': {
-        target: 'http://host.docker.internal:8006',
+        target: 'http://teleflow-bot-gateway:8006',
         changeOrigin: true,
       },
       '/api/v1/userbot': {
-        target: 'http://host.docker.internal:8007',
+        target: 'http://teleflow-userbot-service:8007',
         changeOrigin: true,
       },
       '/api/v1/promotion': {
-        target: 'http://host.docker.internal:8008',
+        target: 'http://teleflow-promotion-service:8008',
         changeOrigin: true,
       },
       '/api/v1/ai': {
-        target: 'http://host.docker.internal:8009',
+        target: 'http://teleflow-ai-service:8009',
         changeOrigin: true,
       },
       '/api/v1/analytics': {
-        target: 'http://host.docker.internal:8010',
+        target: 'http://teleflow-analytics-service:8010',
         changeOrigin: true,
       },
     },
