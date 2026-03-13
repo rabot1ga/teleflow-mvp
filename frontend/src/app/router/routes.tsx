@@ -21,6 +21,7 @@ import { AnalyticsPage } from '../../pages/analytics/AnalyticsPage'
 import { SettingsPage } from '../../pages/settings/SettingsPage'
 
 export const router = createBrowserRouter([
+  // Auth routes (guest only)
   {
     path: '',
     element: (
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       </GuestRoute>
     ),
     children: [
+      {
+        path: '',
+        element: <Navigate to={ROUTES.LOGIN} replace />,
+      },
       {
         path: ROUTES.LOGIN,
         element: <LoginPage />,
@@ -47,6 +52,7 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  // Protected routes
   {
     path: '',
     element: (
@@ -55,10 +61,6 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      {
-        path: '',
-        element: <Navigate to={ROUTES.DASHBOARD} replace />,
-      },
       {
         path: ROUTES.DASHBOARD,
         element: <DashboardPage />,
@@ -93,8 +95,9 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  // 404
   {
     path: '*',
-    element: <Navigate to={ROUTES.DASHBOARD} replace />,
+    element: <Navigate to={ROUTES.LOGIN} replace />,
   },
 ])

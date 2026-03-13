@@ -14,12 +14,16 @@ interface GuestRouteProps {
  * Protected route - redirects to login if not authenticated
  */
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, user } = useAuthStore()
+
+  console.log('[ProtectedRoute] isAuthenticated:', isAuthenticated, 'user:', user)
 
   if (!isAuthenticated) {
+    console.log('[ProtectedRoute] Redirecting to login')
     return <Navigate to={ROUTES.LOGIN} replace />
   }
 
+  console.log('[ProtectedRoute] Rendering children')
   return <>{children}</>
 }
 
@@ -27,11 +31,15 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
  * Guest route - redirects to dashboard if already authenticated
  */
 export function GuestRoute({ children }: GuestRouteProps) {
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, user } = useAuthStore()
+
+  console.log('[GuestRoute] isAuthenticated:', isAuthenticated, 'user:', user)
 
   if (isAuthenticated) {
+    console.log('[GuestRoute] Redirecting to dashboard')
     return <Navigate to={ROUTES.DASHBOARD} replace />
   }
 
+  console.log('[GuestRoute] Rendering children')
   return <>{children}</>
 }
